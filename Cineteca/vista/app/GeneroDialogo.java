@@ -19,6 +19,7 @@ public class GeneroDialogo extends JDialog {
 	private JTextField txtGenero;
 
 	public GeneroDialogo(int id) {
+		setModal(true);
 		setBounds(new Rectangle(0, 0, 400, 165));
 		getContentPane().setLayout(null);
 		
@@ -32,13 +33,13 @@ public class GeneroDialogo extends JDialog {
 		
 		txtIdGen = new JTextField();
 		txtIdGen.setEditable(false);
-		txtIdGen.setText("id");
+		txtIdGen.setText("");
 		txtIdGen.setBounds(97, 8, 114, 20);
 		getContentPane().add(txtIdGen);
 		txtIdGen.setColumns(10);
 		
 		txtGenero = new JTextField();
-		txtGenero.setText("titulo");
+		txtGenero.setText("");
 		txtGenero.setBounds(97, 33, 275, 20);
 		getContentPane().add(txtGenero);
 		txtGenero.setColumns(10);
@@ -64,21 +65,25 @@ public class GeneroDialogo extends JDialog {
 		
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				salvar(getForm());
+				setForm(salvar(getForm()));
 				setVisible(false);
 			}
 		});
 		btnRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				eliminar(getForm().getId());
+				setForm(null);
 				setVisible(false);
 			}
 		});
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				setForm(null);
 				setVisible(false);
 			}
 		});
+		
+		setForm(new GenerosBDD().RecuperaPorId(id));
 	}
 
 	private void eliminar(int id) {
@@ -89,18 +94,18 @@ public class GeneroDialogo extends JDialog {
 		}
 	}
 	
-	private void salvar(Genero g) {
+	private Genero salvar(Genero g) {
 		if (g!=null) {
 			GenerosBDD db = new GenerosBDD();
 			int newId = db.Grabar(g);
 			if (newId>=0) {
 				g.setId(newId);
-				setForm(g);
 				mostrarMensaje("Genero Añadido correctamento.");
 			} else {
 				mostrarMensaje("Error al Añadir.");
 			}
 		}
+		return g;
 	}
 	
 	private void setForm(Genero g) {
@@ -116,8 +121,8 @@ public class GeneroDialogo extends JDialog {
 	private Genero getForm() {
 		Genero g = null;
 		Integer id = Utilidades.validarEntero(txtIdGen.getText());
-		String genero = Utilidades.validarString(txtGenero.getText());
 		if (id!=null) {
+			String genero = Utilidades.validarString(txtGenero.getText());
 			g = new Genero(id, genero);
 		}
 		return g;
@@ -128,9 +133,10 @@ public class GeneroDialogo extends JDialog {
 	}
 	
 	// METODOS PUBLICOS
-	public Integer mostrar() {
+	public Genero mostrar() {
 		setVisible(true);
-		Integer retorno = Utilidades.validarEntero(txtIdGen.getText());
+		Genero retorno = getForm();
+		System.out.println("Retorno del dialogo: " + retorno);
 		dispose();
 		return retorno;
 	}

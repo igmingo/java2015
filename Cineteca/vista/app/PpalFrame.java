@@ -1,4 +1,4 @@
-package app;
+	package app;
 import javax.swing.JFrame;
 
 import java.awt.Rectangle;
@@ -84,7 +84,6 @@ public class PpalFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	public static void main(String[] args) {
-		// TODO Apéndice de método generado automáticamente
 		PpalFrame main = new PpalFrame();
 		main.mostrar();
 	}

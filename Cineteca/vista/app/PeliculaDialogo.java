@@ -20,84 +20,91 @@ public class PeliculaDialogo extends JDialog {
 	private JTextField txtId;
 	private JTextField txtTitulo;
 	private JTextField txtDuracion;
+	private GenerosCombo cbGeneros;
 	private JTextField txtIdGen;
 	private JTextField txtDirector;
 	private JTextField txtEstreno;
 	private JTextArea txtSinopsis;
 
+
 	public PeliculaDialogo(int id) {
+		setModal(true);
 		setBounds(new Rectangle(0, 0, 600, 360));
 		setBounds(new Rectangle(0, 0, 600, 360));
-		setLayout(null);
+		getContentPane().setLayout(null);
 		
 		JLabel lblId = new JLabel("ID");
 		lblId.setBounds(10, 11, 77, 14);
-		add(lblId);
+		getContentPane().add(lblId);
 		
 		JLabel lblTtulo = new JLabel("T\u00EDtulo");
 		lblTtulo.setBounds(10, 36, 77, 14);
-		add(lblTtulo);
+		getContentPane().add(lblTtulo);
 		
 		JLabel lblDuracin = new JLabel("Duraci\u00F3n");
 		lblDuracin.setBounds(10, 61, 77, 14);
-		add(lblDuracin);
+		getContentPane().add(lblDuracin);
 		
 		JLabel lblGnero = new JLabel("G\u00E9nero");
 		lblGnero.setBounds(10, 86, 77, 14);
-		add(lblGnero);
+		getContentPane().add(lblGnero);
 		
 		JLabel lblDirector = new JLabel("Director");
 		lblDirector.setBounds(10, 111, 77, 14);
-		add(lblDirector);
+		getContentPane().add(lblDirector);
 		
 		JLabel lblEstreno = new JLabel("Estreno");
 		lblEstreno.setBounds(10, 136, 77, 14);
-		add(lblEstreno);
+		getContentPane().add(lblEstreno);
 		
 		JLabel lblSinopsis = new JLabel("Sinopsis");
 		lblSinopsis.setBounds(10, 161, 77, 14);
-		add(lblSinopsis);
+		getContentPane().add(lblSinopsis);
 		
 		txtId = new JTextField();
 		txtId.setEditable(false);
 		txtId.setText("id");
 		txtId.setBounds(97, 8, 114, 20);
-		add(txtId);
+		getContentPane().add(txtId);
 		txtId.setColumns(10);
 		
 		txtTitulo = new JTextField();
 		txtTitulo.setText("titulo");
 		txtTitulo.setBounds(97, 33, 475, 20);
-		add(txtTitulo);
+		getContentPane().add(txtTitulo);
 		txtTitulo.setColumns(10);
 		
 		txtDuracion = new JTextField();
 		txtDuracion.setText("duracion");
 		txtDuracion.setBounds(97, 58, 114, 20);
-		add(txtDuracion);
+		getContentPane().add(txtDuracion);
 		txtDuracion.setColumns(10);
 		
 		txtIdGen = new JTextField();
 		txtIdGen.setText("genero");
 		txtIdGen.setBounds(97, 83, 114, 20);
-		add(txtIdGen);
+		getContentPane().add(txtIdGen);
 		txtIdGen.setColumns(10);
+		
+		cbGeneros = new GenerosCombo();
+		cbGeneros.setBounds(221, 83, 143, 20);
+		getContentPane().add(cbGeneros);
 		
 		txtDirector = new JTextField();
 		txtDirector.setText("director");
 		txtDirector.setBounds(97, 108, 475, 20);
-		add(txtDirector);
+		getContentPane().add(txtDirector);
 		txtDirector.setColumns(10);
 		
 		txtEstreno = new JTextField();
 		txtEstreno.setText("estreno");
 		txtEstreno.setBounds(97, 133, 114, 20);
-		add(txtEstreno);
+		getContentPane().add(txtEstreno);
 		txtEstreno.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(93, 161, 479, 90);
-		add(scrollPane);
+		getContentPane().add(scrollPane);
 		
 		txtSinopsis = new JTextArea();
 		txtSinopsis.setText("sinopsis");
@@ -105,7 +112,7 @@ public class PeliculaDialogo extends JDialog {
 		
 		JPanel pnBotones = new JPanel();
 		pnBotones.setBounds(107, 263, 370, 60);
-		add(pnBotones);
+		getContentPane().add(pnBotones);
 		pnBotones.setOpaque(false);
 		pnBotones.setLayout(null);
 		
@@ -139,6 +146,7 @@ public class PeliculaDialogo extends JDialog {
 				setVisible(false);
 			}
 		});
+		setForm(new PeliculasBDD().RecuperaPorId(id));
 	}
 	
 	private void eliminar(int id) {
@@ -169,6 +177,7 @@ public class PeliculaDialogo extends JDialog {
 			txtTitulo.setText(p.getTitulo());
 			txtDuracion.setText("" + p.getDuracion());
 			txtIdGen.setText("" + p.getIdGenero());
+			cbGeneros.recargarCombo(p.getIdGenero());
 			txtDirector.setText(p.getDirector());
 			txtEstreno.setText(p.getEstreno());
 			txtSinopsis.setText(p.getSinopsis());
@@ -177,6 +186,7 @@ public class PeliculaDialogo extends JDialog {
 			txtTitulo.setText("");
 			txtDuracion.setText("");
 			txtIdGen.setText("");
+			cbGeneros.recargarCombo();
 			txtDirector.setText("");
 			txtEstreno.setText("");
 			txtSinopsis.setText("");
@@ -186,28 +196,31 @@ public class PeliculaDialogo extends JDialog {
 	private Pelicula getForm() {
 		Pelicula p = null;
 		Integer id = Utilidades.validarEntero(txtId.getText());
-		String titulo = Utilidades.validarString(txtTitulo.getText());
-		Integer duracion = Utilidades.validarEntero(txtDuracion.getText());
-		Integer idGenero = Utilidades.validarEntero(txtIdGen.getText());
-		String director = Utilidades.validarString(txtDirector.getText());
-		String estreno = Utilidades.validarString(txtEstreno.getText());
-		String sinopsis = Utilidades.validarString(txtSinopsis.getText());
 		if (id!=null) {
+			
+			String titulo = Utilidades.validarString(txtTitulo.getText());
+			Integer duracion = Utilidades.validarEntero(txtDuracion.getText());
+			//el combo nos devuelve el id del Genero designado.
+			int idGenero = cbGeneros.getSelectedIdGen();
+			String director = Utilidades.validarString(txtDirector.getText());
+			String estreno = Utilidades.validarString(txtEstreno.getText());
+			String sinopsis = Utilidades.validarString(txtSinopsis.getText());
+			
+
 			p = new Pelicula(id, titulo, duracion, idGenero, director, estreno, sinopsis);
 		}
 		return p;
 	}
-	
+
 	private void mostrarMensaje(String string) {
 		JOptionPane.showMessageDialog(null, string);
 	}
 	
 	// METODOS PUBLICOS
-	public Integer mostrar() {
+	public Pelicula mostrar() {
 		setVisible(true);
-		Integer retorno = Utilidades.validarEntero(txtId.getText());
+		Pelicula retorno = getForm();
 		dispose();
 		return retorno;
 	}
-	
 }

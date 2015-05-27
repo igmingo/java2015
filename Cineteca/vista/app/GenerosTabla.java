@@ -5,9 +5,20 @@ import java.util.Vector;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 
 public class GenerosTabla extends JTable {
-	public GenerosTabla() {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -599114548334641747L;
+	private String filtro;
+
+	// METODOS CONSTRUCTORES
+	public GenerosTabla(String filtro) {
+		this.filtro = filtro;
 		setModel(new DefaultTableModel(
 			new Object[][] {
 				{null, null},
@@ -29,25 +40,54 @@ public class GenerosTabla extends JTable {
 				return columnEditables[column];
 			}
 		});
+
 		getColumnModel().getColumn(0).setPreferredWidth(200);
-		getColumnModel().getColumn(0).setPreferredWidth(200);
+		setAutoCreateRowSorter(true);
+		
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				int row = getSelectedRow();
+				if (row!=-1) {
+					int intId = (int) getValueAt(row, 1);
+						GeneroDialogo dialog = new GeneroDialogo (intId);
+						Genero g = dialog.mostrar();
+						if (g!=null) {
+							actualizarTabla(filtro);
+						}
+				}
+			}
+		});
+		
 	}
 
-	public void filtrarTabla(String criterio) {
-		ArrayList<Vector<Object>> tabla = new GenerosBDD().recuperaTablaGeneros(criterio);
-		// Cogel el modelo de datos de la tabla jtDptos
+	public void actualizarTabla(String filtro) {
+		this.setFiltro(filtro);
+		ArrayList<Vector<Object>> tabla = new GenerosBDD().recuperaTablaGeneros(filtro);
 		DefaultTableModel dtm = (DefaultTableModel) getModel();
-		//Poner el contador de filas a 0 (elimina lo que tenga la tabla).
 		dtm.setRowCount(0);
-		//Almacena en la tabla, todas las filas que recupero
 		for (Vector<Object> fila : tabla) {
 			dtm.addRow(fila);
 		}
 	}
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -599114548334641747L;
+
+	public void agregarUno(Genero newGenero) {
+		if (newGenero!=null) {
+			DefaultTableModel dtm = (DefaultTableModel) getModel();
+			Vector<Object> fila = new Vector<>();
+			fila.add(newGenero.getGenero());
+			fila.add(newGenero.getId());
+			dtm.addRow(fila);
+		}
+	}
+
+	// METODOS SET Y GET
+	public String getFiltro() {
+		return filtro;
+	}
+
+	public void setFiltro(String filtro) {
+		this.filtro = filtro;
+	}
 
 }

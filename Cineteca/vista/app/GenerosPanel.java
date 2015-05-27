@@ -37,7 +37,7 @@ public class GenerosPanel extends JPanel {
 		scrollPane.setBounds(10, 36, 449, 316);
 		add(scrollPane);
 		
-		tbGeneros = new GenerosTabla();
+		tbGeneros = new GenerosTabla(textFiltro.getText());
 		scrollPane.setViewportView(tbGeneros);
 		
 		JButton btnFiltrar = new JButton("Filtrar");
@@ -45,19 +45,22 @@ public class GenerosPanel extends JPanel {
 		add(btnFiltrar);
 		
 		JButton btnNuevo = new JButton("Nuevo");
-		btnNuevo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				GeneroDialogo dialogo = new GeneroDialogo(0);
-				Integer newId = dialogo.mostrar();
-				tbGeneros.filtrarTabla(textFiltro.getText());
-			}
-		});
 		btnNuevo.setBounds(370, 363, 89, 23);
 		add(btnNuevo);
 		
+		btnNuevo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				GeneroDialogo dialogo = new GeneroDialogo(0);
+				Genero newGenero = dialogo.mostrar();
+				if (newGenero!=null) {
+					tbGeneros.actualizarTabla(textFiltro.getText());
+				}
+			}
+		});
+		
 		btnFiltrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				tbGeneros.filtrarTabla(textFiltro.getText());
+				tbGeneros.actualizarTabla(textFiltro.getText());
 			}
 		});
 	}

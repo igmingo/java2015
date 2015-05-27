@@ -31,4 +31,9 @@ public class Genero {
 		this.genero = genero;
 	}
 
+	@Override
+	public String toString() {
+		return genero;
+	}
+
 }

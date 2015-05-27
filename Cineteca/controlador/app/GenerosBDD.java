@@ -18,7 +18,7 @@ public class GenerosBDD {
 		// Devuelve una tabla, o Vector de Vectores de objetos
 		ArrayList<Vector<Object>> tableData = null;
 		criterio = "WHERE generos.genero LIKE '%" + criterio + "%'";
-		String sql = "SELECT generos.idGen, generos.genero FROM generos " + criterio + " ORDER BY generos.genero";
+		String sql = "SELECT generos.genero, generos.idGen  FROM generos " + criterio + " ORDER BY generos.genero";
 		System.out.println(sql);
 		tableData = new ArrayList<>();
 		Connection c = new Conexion().getConection();
@@ -81,30 +81,34 @@ public class GenerosBDD {
 	
 	public Genero RecuperaPorId (int id) {
 		Genero g = null;
-		String 	sql = "SELECT * FROM generos " +
-				"WHERE generos.idGen = " + id;
-		System.out.println(sql);
-		// CREO UNA CONEXION
-		Connection c = new Conexion().getConection();
-		if (c!=null) {
-			try {
-				// Crea un ESTAMENTO (comando de ejecucion de un sql)
-				Statement comando = c.createStatement();
-				ResultSet rs = comando.executeQuery(sql);
-				if ( rs.first() ) {
-					g = new Genero(
-							rs.getInt("idGen"),
-							rs.getString("genero")
-							);
+		if (id!=0) {
+			String 	sql = "SELECT * FROM generos " +
+					"WHERE generos.idGen = " + id;
+			System.out.println(sql);
+			// CREO UNA CONEXION
+			Connection c = new Conexion().getConection();
+			if (c!=null) {
+				try {
+					// Crea un ESTAMENTO (comando de ejecucion de un sql)
+					Statement comando = c.createStatement();
+					ResultSet rs = comando.executeQuery(sql);
+					if ( rs.first() ) {
+						g = new Genero(
+								rs.getInt("idGen"),
+								rs.getString("genero")
+								);
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
 				}
+			}
+			try {
+				c.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}
-		try {
-			c.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} else {
+			g = new Genero(0, "Nuevo Género");
 		}
 		return g;
 	}
