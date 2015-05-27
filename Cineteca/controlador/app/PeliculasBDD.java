@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class PeliculasBDD {
 	
@@ -160,6 +161,40 @@ public class PeliculasBDD {
 		}
 		System.out.println(sql);
 		return respuesta;
+	}
+
+	public ArrayList<Vector<Object>> recuperaTablaPeliculas(String criterio) {
+			// Devuelve una tabla, o Vector de Vectores de objetos
+			// `titulo`, `estreno`, `director`, `id`
+			ArrayList<Vector<Object>> tableData = null;
+			criterio = "WHERE peliculas.titulo LIKE '%" + criterio + "%'";
+			String sql = "SELECT peliculas.titulo, peliculas.estreno, peliculas.director, peliculas.id FROM peliculas " + criterio + " ORDER BY peliculas.titulo";
+			System.out.println(sql);
+			tableData = new ArrayList<>();
+			Connection c = new Conexion().getConection();
+			if (c!=null) {
+				try {
+					Statement comando = c.createStatement();
+					ResultSet rs = comando.executeQuery(sql);
+					while (rs.next() == true) {
+						//Los datos de la fila son un tipo VECTOR
+						Vector<Object> filaData = new Vector<>();
+						filaData.add(rs.getString("titulo"));
+						filaData.add(rs.getString("estreno"));
+						filaData.add(rs.getString("director"));
+						filaData.add(rs.getInt("id"));
+						tableData.add(filaData);
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				c.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return tableData;
 	}
 	
 }

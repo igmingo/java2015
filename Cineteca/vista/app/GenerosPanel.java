@@ -8,6 +8,9 @@ import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 
 public class GenerosPanel extends JPanel {
 	/**
@@ -22,16 +25,16 @@ public class GenerosPanel extends JPanel {
 		setLayout(null);
 		
 		JLabel lblFiltro = new JLabel("Generos");
-		lblFiltro.setBounds(10, 11, 41, 16);
+		lblFiltro.setBounds(10, 11, 80, 16);
 		add(lblFiltro);
 		
 		textFiltro = new JTextField();
-		textFiltro.setBounds(63, 8, 297, 20);
+		textFiltro.setBounds(100, 8, 260, 20);
 		add(textFiltro);
 		textFiltro.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 36, 449, 350);
+		scrollPane.setBounds(10, 36, 449, 316);
 		add(scrollPane);
 		
 		tbGeneros = new GenerosTabla();
@@ -40,5 +43,22 @@ public class GenerosPanel extends JPanel {
 		JButton btnFiltrar = new JButton("Filtrar");
 		btnFiltrar.setBounds(370, 7, 89, 23);
 		add(btnFiltrar);
+		
+		JButton btnNuevo = new JButton("Nuevo");
+		btnNuevo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				GeneroDialogo dialogo = new GeneroDialogo(0);
+				Integer newId = dialogo.mostrar();
+				tbGeneros.filtrarTabla(textFiltro.getText());
+			}
+		});
+		btnNuevo.setBounds(370, 363, 89, 23);
+		add(btnNuevo);
+		
+		btnFiltrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				tbGeneros.filtrarTabla(textFiltro.getText());
+			}
+		});
 	}
 }

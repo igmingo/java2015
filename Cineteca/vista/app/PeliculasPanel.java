@@ -4,7 +4,10 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
+
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class PeliculasPanel extends JPanel {
 	/**
@@ -19,11 +22,11 @@ public class PeliculasPanel extends JPanel {
 		setLayout(null);
 		
 		JLabel lblFiltro = new JLabel("Pel\u00EDculas");
-		lblFiltro.setBounds(10, 11, 52, 16);
+		lblFiltro.setBounds(10, 11, 78, 16);
 		add(lblFiltro);
 		
 		textFiltro = new JTextField();
-		textFiltro.setBounds(72, 8, 288, 20);
+		textFiltro.setBounds(100, 8, 260, 20);
 		add(textFiltro);
 		textFiltro.setColumns(10);
 		
@@ -37,5 +40,11 @@ public class PeliculasPanel extends JPanel {
 		JButton btnFiltrar = new JButton("Filtrar");
 		btnFiltrar.setBounds(370, 7, 89, 23);
 		add(btnFiltrar);
+		
+		btnFiltrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				tbPeliculas.filtrarTabla(textFiltro.getText());
+			}
+		});
 	}
 }

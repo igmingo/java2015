@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class GenerosBDD {
 
@@ -12,6 +13,37 @@ public class GenerosBDD {
 	// `id`, `titulo`, `duracion`, `idGen`, `director`, `estreno`, `sinopsis`
 	// generos
 	// `idGen`, `genero`
+	
+	public ArrayList<Vector<Object>> recuperaTablaGeneros(String criterio) {
+		// Devuelve una tabla, o Vector de Vectores de objetos
+		ArrayList<Vector<Object>> tableData = null;
+		criterio = "WHERE generos.genero LIKE '%" + criterio + "%'";
+		String sql = "SELECT generos.idGen, generos.genero FROM generos " + criterio + " ORDER BY generos.genero";
+		System.out.println(sql);
+		tableData = new ArrayList<>();
+		Connection c = new Conexion().getConection();
+		if (c!=null) {
+			try {
+				Statement comando = c.createStatement();
+				ResultSet rs = comando.executeQuery(sql);
+				while (rs.next() == true) {
+					//Los datos de la fila son un tipo VECTOR
+					Vector<Object> filaData = new Vector<>();
+					filaData.add(rs.getString("genero"));
+					filaData.add(rs.getInt("idGen"));
+					tableData.add(filaData);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		try {
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return tableData;
+	}
 	
 	public ArrayList<Genero> RecuperaTodos (){
 		return Recupera("");
@@ -30,7 +62,7 @@ public class GenerosBDD {
 				ResultSet rs = comando.executeQuery(sql);
 				while (rs.next() == true) {
 					lista.add(new Genero(
-							rs.getInt("id"),
+							rs.getInt("idGen"),
 							rs.getString("genero")
 							)
 					);
@@ -50,7 +82,7 @@ public class GenerosBDD {
 	public Genero RecuperaPorId (int id) {
 		Genero g = null;
 		String 	sql = "SELECT * FROM generos " +
-				"WHERE generos.id = " + id;
+				"WHERE generos.idGen = " + id;
 		System.out.println(sql);
 		// CREO UNA CONEXION
 		Connection c = new Conexion().getConection();
@@ -61,7 +93,7 @@ public class GenerosBDD {
 				ResultSet rs = comando.executeQuery(sql);
 				if ( rs.first() ) {
 					g = new Genero(
-							rs.getInt("id"),
+							rs.getInt("idGen"),
 							rs.getString("genero")
 							);
 				}
@@ -87,7 +119,7 @@ public class GenerosBDD {
 		} else {
 			sql = "UPDATE generos " +
 					"SET generos.genero = '" + g.getGenero() + "', " +
-					"WHERE generos.id = " + g.getId();
+					"WHERE generos.idGen = " + g.getId();
 					;
 		}
 		System.out.println(sql);
@@ -128,7 +160,7 @@ public class GenerosBDD {
 	public boolean Eliminar (int id) {
 		boolean respuesta = false;
 		String 	sql = "DELETE FROM generos " +
-				"WHERE generos.id = " + id;
+				"WHERE generos.idGen = " + id;
 		System.out.println(sql);
 		// CREO UNA CONEXION
 		Connection c = new Conexion().getConection();
@@ -151,6 +183,5 @@ public class GenerosBDD {
 		System.out.println(sql);
 		return respuesta;
 	}
-	
 	
 }
