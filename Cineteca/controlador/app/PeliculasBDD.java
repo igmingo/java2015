@@ -18,28 +18,23 @@ public class PeliculasBDD {
 		return Recupera("");
 	}
 	
-	public ArrayList<Pelicula> Recupera(String criterio){
+	public ArrayList<Pelicula> Recupera(String criterio) {
 		criterio = "WHERE peliculas.titulo LIKE '%" + criterio + "%'";
-		String sql = "SELECT * FROM peliculas " + criterio + " ORDER BY peliculas.titulo";
+		String sql = "SELECT * FROM peliculas " + criterio
+				+ " ORDER BY peliculas.titulo";
 		System.out.println(sql);
-		ArrayList<Pelicula> lista = new ArrayList<>(); 
+		ArrayList<Pelicula> lista = new ArrayList<>();
 		Connection c = new Conexion().getConection();
-		if (c!=null) {
+		if (c != null) {
 			try {
 				// Crea un ESTAMENTO (comando de ejecucion de un sql)
 				Statement comando = c.createStatement();
 				ResultSet rs = comando.executeQuery(sql);
 				while (rs.next() == true) {
-					lista.add(new Pelicula(
-							rs.getInt("id"),
-							rs.getString("titulo"),
-							rs.getInt("duracion"),
-							rs.getInt("idGen"),
-							rs.getString("director"),
-							rs.getString("estreno"),
-							rs.getString("sinopsis")
-							)
-					);
+					lista.add(new Pelicula(rs.getInt("id"), rs
+							.getString("titulo"), rs.getInt("duracion"), rs
+							.getInt("idGen"), rs.getString("director"), rs
+							.getString("estreno"), rs.getString("sinopsis")));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -53,37 +48,40 @@ public class PeliculasBDD {
 		return lista;
 	}
 	
-	public Pelicula RecuperaPorId (int id) {
+	public Pelicula RecuperaPorId(int id) {
 		Pelicula peli = null;
-		String 	sql = "SELECT * FROM peliculas " +
-				"WHERE peliculas.id = " + id;
-		System.out.println(sql);
-		// CREO UNA CONEXION
-		Connection c = new Conexion().getConection();
-		if (c!=null) {
-			try {
-				// Crea un ESTAMENTO (comando de ejecucion de un sql)
-				Statement comando = c.createStatement();
-				ResultSet rs = comando.executeQuery(sql);
-				if ( rs.first() ) {
-					peli = new Pelicula(
-							rs.getInt("id"),
-							rs.getString("titulo"),
-							rs.getInt("duracion"),
-							rs.getInt("idGen"),
-							rs.getString("director"),
-							rs.getString("estreno"),
-							rs.getString("sinopsis")
-							);
+		if (id != 0) {
+			String sql = "SELECT * FROM peliculas " + "WHERE peliculas.id = "
+					+ id;
+			System.out.println(sql);
+			// CREO UNA CONEXION
+			Connection c = new Conexion().getConection();
+			if (c != null) {
+				try {
+					// Crea un ESTAMENTO (comando de ejecucion de un sql)
+					Statement comando = c.createStatement();
+					ResultSet rs = comando.executeQuery(sql);
+					if (rs.first()) {
+						peli = new Pelicula(
+								rs.getInt("id"),
+								rs.getString("titulo"), 
+								rs.getInt("duracion"),
+								rs.getInt("idGen"), 
+								rs.getString("director"),
+								rs.getString("estreno"),
+								rs.getString("sinopsis"));
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
 				}
+			}
+			try {
+				c.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}
-		try {
-			c.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} else {
+			peli = new Pelicula(0);
 		}
 		return peli;
 	}
@@ -92,12 +90,22 @@ public class PeliculasBDD {
 		int respuesta = -1;
 		String sql = "";
 		if (peli.getId()==0) {
-			sql = "INSERT INTO peliculas " +
-					"SET peliculas.titulo = '" + peli.getTitulo() + "'"
+			sql = "INSERT INTO peliculas SET " +
+					"peliculas.titulo = '" + peli.getTitulo() + "', " +
+					"peliculas.duracion = " + peli.getDuracion() + ", " +
+					"peliculas.idGen = " + peli.getIdGenero() + ", " +
+					"peliculas.director = '" + peli.getDirector() + "', " +
+					"peliculas.estreno = '" + peli.getEstreno() + "', " +
+					"peliculas.sinopsis = '" + peli.getSinopsis() + "'"
 					;
 		} else {
-			sql = "UPDATE peliculas " +
-					"SET peliculas.titulo = '" + peli.getTitulo() + "', " +
+			sql = "UPDATE peliculas SET " +
+					"peliculas.titulo = '" + peli.getTitulo() + "', " +
+					"peliculas.duracion = " + peli.getDuracion() + ", " +
+					"peliculas.idGen = " + peli.getIdGenero() + ", " +
+					"peliculas.director = '" + peli.getDirector() + "', " +
+					"peliculas.estreno = '" + peli.getEstreno() + "', " +
+					"peliculas.sinopsis = '" + peli.getSinopsis() + "' " +
 					"WHERE peliculas.id = " + peli.getId();
 					;
 		}

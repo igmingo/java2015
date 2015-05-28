@@ -6,6 +6,14 @@ import java.util.Date;
 
 public class Utilidades {
 	
+	public static String validarStringNoNull(String campo) {
+		if (estaRelleno(campo)) {
+			return campo;
+		} else {
+			return "";
+		}
+	}
+	
 	public static String validarString(String campo) {
 		if (estaRelleno(campo)) {
 			return campo;

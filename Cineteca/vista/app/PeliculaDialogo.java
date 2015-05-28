@@ -21,13 +21,14 @@ public class PeliculaDialogo extends JDialog {
 	private JTextField txtTitulo;
 	private JTextField txtDuracion;
 	private GenerosCombo cbGeneros;
-	private JTextField txtIdGen;
+	//private JTextField txtIdGen;
 	private JTextField txtDirector;
 	private JTextField txtEstreno;
 	private JTextArea txtSinopsis;
 
 
 	public PeliculaDialogo(int id) {
+		setResizable(false);
 		setModal(true);
 		setBounds(new Rectangle(0, 0, 600, 360));
 		setBounds(new Rectangle(0, 0, 600, 360));
@@ -80,14 +81,14 @@ public class PeliculaDialogo extends JDialog {
 		getContentPane().add(txtDuracion);
 		txtDuracion.setColumns(10);
 		
-		txtIdGen = new JTextField();
-		txtIdGen.setText("genero");
-		txtIdGen.setBounds(97, 83, 114, 20);
-		getContentPane().add(txtIdGen);
-		txtIdGen.setColumns(10);
+//		txtIdGen = new JTextField();
+//		txtIdGen.setText("genero");
+//		txtIdGen.setBounds(97, 83, 114, 20);
+//		getContentPane().add(txtIdGen);
+//		txtIdGen.setColumns(10);
 		
 		cbGeneros = new GenerosCombo();
-		cbGeneros.setBounds(221, 83, 143, 20);
+		cbGeneros.setBounds(97, 83, 219, 20);
 		getContentPane().add(cbGeneros);
 		
 		txtDirector = new JTextField();
@@ -107,6 +108,7 @@ public class PeliculaDialogo extends JDialog {
 		getContentPane().add(scrollPane);
 		
 		txtSinopsis = new JTextArea();
+		txtSinopsis.setLocation(97, 0);
 		txtSinopsis.setText("sinopsis");
 		scrollPane.setViewportView(txtSinopsis);
 		
@@ -150,10 +152,10 @@ public class PeliculaDialogo extends JDialog {
 	}
 	
 	private void eliminar(int id) {
-		int pregunta = JOptionPane.showConfirmDialog(null, "¿Desea eliminar el Genero?\nSe eliminarán todas las películas de ese Género.", "Eliminar Genero", JOptionPane.OK_CANCEL_OPTION);
+		int pregunta = JOptionPane.showConfirmDialog(null, "¿Desea eliminar la Película?\n", "Eliminar Pelicula", JOptionPane.OK_CANCEL_OPTION);
 		if (pregunta==JOptionPane.OK_OPTION) {
 			boolean eliminado = new PeliculasBDD().Eliminar(id);
-			mostrarMensaje(eliminado?"Genero Eliminado.":"No se ha podido eliminar.");
+			mostrarMensaje(eliminado?"Pelicula Eliminada.":"No se ha podido eliminar.");
 		}
 	}
 	
@@ -164,7 +166,7 @@ public class PeliculaDialogo extends JDialog {
 			if (newId>=0) {
 				p.setId(newId);
 				setForm(p);
-				mostrarMensaje("Genero Añadido correctamento.");
+				mostrarMensaje("Pelicula añadida correctamento.");
 			} else {
 				mostrarMensaje("Error al Añadir.");
 			}
@@ -175,8 +177,12 @@ public class PeliculaDialogo extends JDialog {
 		if (p!=null) {
 			txtId.setText("" + p.getId());
 			txtTitulo.setText(p.getTitulo());
-			txtDuracion.setText("" + p.getDuracion());
-			txtIdGen.setText("" + p.getIdGenero());
+			if (p.getDuracion()!=null) {
+				txtDuracion.setText("" + p.getDuracion() );
+			} else {
+				txtDuracion.setText("");
+			}
+			//txtIdGen.setText("" + p.getIdGenero());
 			cbGeneros.recargarCombo(p.getIdGenero());
 			txtDirector.setText(p.getDirector());
 			txtEstreno.setText(p.getEstreno());
@@ -185,7 +191,7 @@ public class PeliculaDialogo extends JDialog {
 			txtId.setText("");
 			txtTitulo.setText("");
 			txtDuracion.setText("");
-			txtIdGen.setText("");
+			//txtIdGen.setText("");
 			cbGeneros.recargarCombo();
 			txtDirector.setText("");
 			txtEstreno.setText("");
@@ -197,16 +203,13 @@ public class PeliculaDialogo extends JDialog {
 		Pelicula p = null;
 		Integer id = Utilidades.validarEntero(txtId.getText());
 		if (id!=null) {
-			
-			String titulo = Utilidades.validarString(txtTitulo.getText());
+			String titulo = Utilidades.validarStringNoNull(txtTitulo.getText());
 			Integer duracion = Utilidades.validarEntero(txtDuracion.getText());
 			//el combo nos devuelve el id del Genero designado.
 			int idGenero = cbGeneros.getSelectedIdGen();
 			String director = Utilidades.validarString(txtDirector.getText());
 			String estreno = Utilidades.validarString(txtEstreno.getText());
 			String sinopsis = Utilidades.validarString(txtSinopsis.getText());
-			
-
 			p = new Pelicula(id, titulo, duracion, idGenero, director, estreno, sinopsis);
 		}
 		return p;

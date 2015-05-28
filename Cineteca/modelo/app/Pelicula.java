@@ -2,7 +2,7 @@ package app;
 
 public class Pelicula {
 	//peliculas
-	//`id`, `titulo`, `duracion`, `idGen`, `director`, `estreno`, `sinopsis`
+	//*`id`, *`titulo`, `duracion`, *`idGen`, `director`, `estreno`, `sinopsis`
 	//generos
 	//`idGen`, `genero`
 	
@@ -16,6 +16,12 @@ public class Pelicula {
 	String sinopsis;
 	
 	public Pelicula() {
+	}
+	
+	public Pelicula(int id) {
+		this.id = id;
+		this.titulo = "Sin título";
+		this.idGenero = 0;
 	}
 	
 	public Pelicula(int id, String titulo, int idGenero) {

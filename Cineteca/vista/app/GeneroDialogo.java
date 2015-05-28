@@ -19,6 +19,7 @@ public class GeneroDialogo extends JDialog {
 	private JTextField txtGenero;
 
 	public GeneroDialogo(int id) {
+		setResizable(false);
 		setModal(true);
 		setBounds(new Rectangle(0, 0, 400, 165));
 		getContentPane().setLayout(null);
