@@ -96,19 +96,16 @@ public class _PpalFrame extends JFrame {
 		pnPrincipal.add(tabs);
 		
 		pnPeliculas = new JPanel();
-		pnPeliculas.add(new PeliculasPanel(user));
 		pnPeliculas.setLayout(null);
 		tabs.addTab("Películas", null, pnPeliculas, null);
 		tabs.setEnabledAt(0, true);
 	
 		pnGeneros = new JPanel();
-		pnGeneros.add(new GenerosPanel(user));
 		pnGeneros.setLayout(null);
 		tabs.addTab("Géneros", null, pnGeneros, null);
 		tabs.setEnabledAt(1, true);
 		
 		pnUsuarios = new JPanel();
-		pnUsuarios.add(new UsuariosPanel(user));
 		pnUsuarios.setLayout(null);
 		tabs.addTab("Usuarios", null, pnUsuarios, null);
 		tabs.setEnabledAt(2, false);
@@ -138,6 +135,8 @@ public class _PpalFrame extends JFrame {
 				user = pnLogin.login();
 				if (user!=null) {
 					entrar(user);
+					setTitle(user.getName());
+					System.out.println(user.getName());
 				}
 			}
 		});
@@ -146,10 +145,11 @@ public class _PpalFrame extends JFrame {
 	
 	private void entrar(Usuario userLogeado) {
 		boolean logeado = (userLogeado.isLoged() && userLogeado.getStatus()>0);
-		menuBar.setVisible(logeado);
-		pnLogin.setVisible(!logeado);
-		pnPrincipal.setVisible(logeado);
 		if (logeado) {
+			cargarPaneles();
+			menuBar.setVisible(logeado);
+			pnLogin.setVisible(!logeado);
+			pnPrincipal.setVisible(logeado);
 			if (userLogeado.isAdmin()){
 				mnPeliculas.setEnabled(logeado);
 				mnGeneros.setEnabled(logeado);
@@ -177,6 +177,15 @@ public class _PpalFrame extends JFrame {
 	public static void main(String[] args) {
 		_PpalFrame main = new _PpalFrame();
 		main.mostrar();
+	}
+	
+	private void cargarPaneles(){
+		pnPeliculas.removeAll();
+		pnPeliculas.add(new PeliculasPanel(user));
+		pnGeneros.removeAll();
+		pnGeneros.add(new GenerosPanel(user));
+		pnUsuarios.removeAll();
+		pnUsuarios.add(new UsuariosPanel(user));
 	}
 
 	private void mostrar() {

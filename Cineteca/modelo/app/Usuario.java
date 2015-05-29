@@ -5,7 +5,7 @@ public class Usuario {
 	//*id, nombre, *password, estado, *administrador, *email
 	
 	private int id;
-	private String username;
+	private String name;
 	private String email;
 	private boolean isAdmin;
 	private int status;
@@ -20,7 +20,7 @@ public class Usuario {
 	public Usuario(int id, String username, String email,
 			boolean isAdmin, int status) {
 		this.id = id;
-		this.username = username;
+		this.name = username;
 		this.email = email;
 		this.isAdmin = isAdmin;
 		this.status = status;
@@ -34,12 +34,12 @@ public class Usuario {
 		this.id = id;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getName() {
+		return name;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getEmail() {

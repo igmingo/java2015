@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="modelo"/>
-	<classpathentry kind="src" path="vista.main"/>
+	<classpathentry kind="src" path="PRINCIPAL"/>
 	<classpathentry kind="src" path="controlador"/>
-	<classpathentry kind="src" path="utilidades"/>
+	<classpathentry kind="src" path="otros"/>
 	<classpathentry kind="src" path="vista.dialogos"/>
 	<classpathentry kind="src" path="vista.paneles"/>
 	<classpathentry kind="src" path="vista.tablas"/>

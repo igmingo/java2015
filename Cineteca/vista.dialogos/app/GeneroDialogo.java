@@ -17,8 +17,11 @@ public class GeneroDialogo extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private JTextField txtIdGen;
 	private JTextField txtGenero;
-
-	public GeneroDialogo(int id) {
+	private Usuario usuario;
+	
+	public GeneroDialogo(Usuario user, int id) {
+		this.usuario = user;
+		setTitle(usuario.getName());
 		setResizable(false);
 		setModal(true);
 		setBounds(new Rectangle(0, 0, 400, 165));

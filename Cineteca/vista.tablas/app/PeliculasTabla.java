@@ -14,8 +14,12 @@ public class PeliculasTabla extends JTable {
 	 */
 	private static final long serialVersionUID = -371381706871909469L;
 	private String filtro;
+	private Usuario usuario;
 	
-	public PeliculasTabla(String filtro) {
+	public PeliculasTabla(Usuario user, String filtro) {
+		System.out.println("Tabla de " + user.getName());
+		this.usuario = user;
+		System.out.println("Tabla de " + usuario.getName());
 		this.filtro = filtro;
 		setModel(new DefaultTableModel(
 			new Object[][] {
@@ -48,7 +52,7 @@ public class PeliculasTabla extends JTable {
 				int row = getSelectedRow();
 				if (row!=-1) {
 					int intId = (int) getValueAt(row, 3);
-						PeliculaDialogo dialog = new PeliculaDialogo (intId);
+						PeliculaDialogo dialog = new PeliculaDialogo (usuario, intId);
 						Pelicula p = dialog.mostrar();
 						if (p!=null) {
 							actualizarTabla(filtro);

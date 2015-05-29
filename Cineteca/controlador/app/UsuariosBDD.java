@@ -124,14 +124,14 @@ public class UsuariosBDD {
 		String sql = "";
 		if (u.getId()==0) {
 			sql = "INSERT INTO usuarios SET " +
-					"usuarios.nombre = '" + u.getUsername() + "' " + 
+					"usuarios.nombre = '" + u.getName() + "' " + 
 					"usuarios.estado = '" + u.getStatus() + "' " + 
 					"usuarios.administrador = '" + u.isAdmin() + "' " + 
 					"usuarios.email = '" + u.getEmail() + "'"
 					;
 		} else {
 			sql = "UPDATE usuarios SET " +
-					"usuarios.nombre = '" + u.getUsername() + "' " + 
+					"usuarios.nombre = '" + u.getName() + "' " + 
 					"usuarios.estado = '" + u.getStatus() + "' " + 
 					"usuarios.administrador = '" + u.isAdmin() + "' " + 
 					"usuarios.email = '" + u.getEmail() + "' " +

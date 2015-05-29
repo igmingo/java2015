@@ -16,8 +16,10 @@ public class PeliculasPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTextField textFiltro;
 	private PeliculasTabla tbPeliculas;
+	private Usuario usuario;
 
 	public PeliculasPanel(Usuario user) {
+		this.usuario = user;
 		setBounds(new Rectangle(0, 0, 469, 397));
 		setLayout(null);
 		
@@ -34,7 +36,7 @@ public class PeliculasPanel extends JPanel {
 		scrollPane.setBounds(10, 36, 449, 315);
 		add(scrollPane);
 		
-		tbPeliculas = new PeliculasTabla(textFiltro.getText());
+		tbPeliculas = new PeliculasTabla(usuario, textFiltro.getText());
 		scrollPane.setViewportView(tbPeliculas);
 		
 		JButton btnFiltrar = new JButton("Filtrar");
@@ -47,7 +49,7 @@ public class PeliculasPanel extends JPanel {
 		
 		btnNuevo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				PeliculaDialogo dialogo = new PeliculaDialogo(0);
+				PeliculaDialogo dialogo = new PeliculaDialogo(usuario, 0);
 				Pelicula newPelicula = dialogo.mostrar();
 				if (newPelicula!=null) {
 					tbPeliculas.actualizarTabla(textFiltro.getText());

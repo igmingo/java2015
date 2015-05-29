@@ -15,9 +15,11 @@ public class GenerosTabla extends JTable {
 	 */
 	private static final long serialVersionUID = -599114548334641747L;
 	private String filtro;
+	private Usuario usuario;
 
 	// METODOS CONSTRUCTORES
-	public GenerosTabla(String filtro) {
+	public GenerosTabla(Usuario user, String filtro) {
+		this.usuario = user;
 		this.filtro = filtro;
 		setModel(new DefaultTableModel(
 			new Object[][] {
@@ -50,7 +52,7 @@ public class GenerosTabla extends JTable {
 				int row = getSelectedRow();
 				if (row!=-1) {
 					int intId = (int) getValueAt(row, 1);
-						GeneroDialogo dialog = new GeneroDialogo (intId);
+						GeneroDialogo dialog = new GeneroDialogo (usuario, intId);
 						Genero g = dialog.mostrar();
 						if (g!=null) {
 							actualizarTabla(filtro);

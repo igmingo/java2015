@@ -19,8 +19,10 @@ public class UsuariosPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTextField textFiltro;
 	private UsuariosTabla tbUsuarios;
+	private Usuario usuario;
 
 	public UsuariosPanel(Usuario user) {
+		this.usuario = user;
 		setBounds(new Rectangle(0, 0, 469, 397));
 		setLayout(null);
 		
@@ -37,7 +39,7 @@ public class UsuariosPanel extends JPanel {
 		scrollPane.setBounds(10, 36, 449, 316);
 		add(scrollPane);
 		
-		tbUsuarios = new UsuariosTabla(textFiltro.getText());
+		tbUsuarios = new UsuariosTabla(usuario, textFiltro.getText());
 		scrollPane.setViewportView(tbUsuarios);
 		
 		JButton btnFiltrar = new JButton("Filtrar");
@@ -50,7 +52,7 @@ public class UsuariosPanel extends JPanel {
 		
 		btnNuevo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				GeneroDialogo dialogo = new GeneroDialogo(0);
+				GeneroDialogo dialogo = new GeneroDialogo(usuario, 0);
 				Genero newGenero = dialogo.mostrar();
 				if (newGenero!=null) {
 					tbUsuarios.actualizarTabla(textFiltro.getText());

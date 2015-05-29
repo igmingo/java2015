@@ -25,12 +25,14 @@ public class UsuarioDialogo extends JDialog {
 	private JPasswordField txtPassword;
 	private JCheckBox chkIsAdmin;
 	private EstadosCombo cbStatus;
+	private Usuario usuario;
 	
-	public UsuarioDialogo(int id) {
-		getContentPane().setBounds(new Rectangle(0, 0, 380, 250));
+	public UsuarioDialogo(Usuario user, int id) {
+		this.usuario = user;
+		setTitle(user.getName());
 		setResizable(false);
 		setModal(true);
-		setBounds(new Rectangle(0, 0, 400, 165));
+		setBounds(new Rectangle(0, 0, 600, 360));
 		getContentPane().setLayout(null);
 		
 		JLabel lblId = new JLabel("ID");
@@ -165,7 +167,7 @@ public class UsuarioDialogo extends JDialog {
 	private void setForm(Usuario g) {
 		if (g!=null) {
 			txtId.setText("" + g.getId());
-			txtUsername.setText(g.getUsername());
+			txtUsername.setText(g.getName());
 			txtEmail.setText(g.getEmail());
 			txtPassword.setText("");
 			chkIsAdmin.setSelected(g.isAdmin());

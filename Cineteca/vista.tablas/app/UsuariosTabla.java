@@ -15,9 +15,11 @@ public class UsuariosTabla extends JTable {
 	 */
 	private static final long serialVersionUID = -599114548334641747L;
 	private String filtro;
+	private Usuario usuario;
 
 	// METODOS CONSTRUCTORES
-	public UsuariosTabla(String filtro) {
+	public UsuariosTabla(Usuario user, String filtro) {
+		this.usuario = user;
 		this.filtro = filtro;
 		setModel(new DefaultTableModel(
 			new Object[][] {
@@ -52,7 +54,7 @@ public class UsuariosTabla extends JTable {
 				int row = getSelectedRow();
 				if (row!=-1) {
 					int intId = (int) getValueAt(row, 2);
-						UsuarioDialogo dialog = new UsuarioDialogo (intId);
+						UsuarioDialogo dialog = new UsuarioDialogo (usuario, intId);
 						Usuario u = dialog.mostrar();
 						if (u!=null) {
 							actualizarTabla(filtro);

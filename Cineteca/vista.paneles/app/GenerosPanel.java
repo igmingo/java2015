@@ -19,8 +19,10 @@ public class GenerosPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTextField textFiltro;
 	private GenerosTabla tbGeneros;
+	private Usuario usuario;
 
 	public GenerosPanel(Usuario user) {
+		this.usuario = user;
 		setBounds(new Rectangle(0, 0, 469, 397));
 		setLayout(null);
 		
@@ -37,7 +39,7 @@ public class GenerosPanel extends JPanel {
 		scrollPane.setBounds(10, 36, 449, 316);
 		add(scrollPane);
 		
-		tbGeneros = new GenerosTabla(textFiltro.getText());
+		tbGeneros = new GenerosTabla(usuario, textFiltro.getText());
 		scrollPane.setViewportView(tbGeneros);
 		
 		JButton btnFiltrar = new JButton("Filtrar");
@@ -50,7 +52,7 @@ public class GenerosPanel extends JPanel {
 		
 		btnNuevo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				GeneroDialogo dialogo = new GeneroDialogo(0);
+				GeneroDialogo dialogo = new GeneroDialogo(usuario, 0);
 				Genero newGenero = dialogo.mostrar();
 				if (newGenero!=null) {
 					tbGeneros.actualizarTabla(textFiltro.getText());

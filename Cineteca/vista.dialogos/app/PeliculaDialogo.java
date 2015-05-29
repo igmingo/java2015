@@ -24,12 +24,13 @@ public class PeliculaDialogo extends JDialog {
 	private JTextField txtDirector;
 	private JTextField txtEstreno;
 	private JTextArea txtSinopsis;
+	private Usuario usuario;
 
-
-	public PeliculaDialogo(int id) {
+	public PeliculaDialogo(Usuario user, int id) {
+		this.usuario = user;
+		setTitle(usuario.getName());
 		setResizable(false);
 		setModal(true);
-		setBounds(new Rectangle(0, 0, 600, 360));
 		setBounds(new Rectangle(0, 0, 600, 360));
 		getContentPane().setLayout(null);
 		
