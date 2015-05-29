@@ -144,6 +144,7 @@ public class UsuarioDialogo extends JDialog {
 			int newId = db.Grabar(u);
 			if (newId>=0) {
 				u.setId(newId);
+				ponerPassword(u, new String(txtPassword.getPassword()) );
 				mostrarMensaje("Usuario añadido correctamento.");
 			} else {
 				mostrarMensaje("Error al Añadir.");
@@ -152,12 +153,21 @@ public class UsuarioDialogo extends JDialog {
 		return u;
 	}
 	
+	private boolean ponerPassword(Usuario u, String password) {
+		boolean resultado = false;
+		if (password!=null && u!=null && u.isLoged()) {
+			UsuariosBDD db = new UsuariosBDD();
+			resultado = db.ponerPassword(u.getId(), password);
+		}
+		return resultado;
+	}
+	
 	private void setForm(Usuario g) {
 		if (g!=null) {
 			txtId.setText("" + g.getId());
 			txtUsername.setText(g.getUsername());
 			txtEmail.setText(g.getEmail());
-			txtPassword.setText(g.getPassword());
+			txtPassword.setText("");
 			chkIsAdmin.setSelected(g.isAdmin());
 			cbStatus.setEstado(g.getStatus());
 		} else {
@@ -176,10 +186,10 @@ public class UsuarioDialogo extends JDialog {
 		if (id!=null) {
 			String username = Utilidades.validarString(txtUsername.getText());
 			String email = Utilidades.validarString(txtEmail.getText());
-			String password = Utilidades.validarString(txtPassword.getText());
+			//String password = Utilidades.validarString(txtPassword.getText());
 			int status = cbStatus.getEstado();
 			boolean isAdmin = chkIsAdmin.isSelected();
-			g = new Usuario(id, username, email, password, isAdmin, status );
+			g = new Usuario(id, username, email, isAdmin, status );
 		}
 		return g;
 	}

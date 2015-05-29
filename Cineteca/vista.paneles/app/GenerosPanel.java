@@ -20,7 +20,7 @@ public class GenerosPanel extends JPanel {
 	private JTextField textFiltro;
 	private GenerosTabla tbGeneros;
 
-	public GenerosPanel() {
+	public GenerosPanel(Usuario user) {
 		setBounds(new Rectangle(0, 0, 469, 397));
 		setLayout(null);
 		

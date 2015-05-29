@@ -5,10 +5,10 @@ public class Genero {
 	// `id`, `titulo`, `duracion`, `idGen`, `director`, `estreno`, `sinopsis`
 	// generos
 	// `idGen`, `genero`
-
+	
 	// CLASE GENEROS
-	int id;
-	String genero;
+	private int id;
+	private String genero;
 
 	public Genero(int id, String genero) {
 		this.id = id;

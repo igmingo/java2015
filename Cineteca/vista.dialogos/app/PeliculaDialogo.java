@@ -21,7 +21,6 @@ public class PeliculaDialogo extends JDialog {
 	private JTextField txtTitulo;
 	private JTextField txtDuracion;
 	private GenerosCombo cbGeneros;
-	//private JTextField txtIdGen;
 	private JTextField txtDirector;
 	private JTextField txtEstreno;
 	private JTextArea txtSinopsis;
@@ -80,12 +79,6 @@ public class PeliculaDialogo extends JDialog {
 		txtDuracion.setBounds(97, 58, 114, 20);
 		getContentPane().add(txtDuracion);
 		txtDuracion.setColumns(10);
-		
-//		txtIdGen = new JTextField();
-//		txtIdGen.setText("genero");
-//		txtIdGen.setBounds(97, 83, 114, 20);
-//		getContentPane().add(txtIdGen);
-//		txtIdGen.setColumns(10);
 		
 		cbGeneros = new GenerosCombo();
 		cbGeneros.setBounds(97, 83, 219, 20);
@@ -182,7 +175,6 @@ public class PeliculaDialogo extends JDialog {
 			} else {
 				txtDuracion.setText("");
 			}
-			//txtIdGen.setText("" + p.getIdGenero());
 			cbGeneros.recargarCombo(p.getIdGenero());
 			txtDirector.setText(p.getDirector());
 			txtEstreno.setText(p.getEstreno());
@@ -191,7 +183,6 @@ public class PeliculaDialogo extends JDialog {
 			txtId.setText("");
 			txtTitulo.setText("");
 			txtDuracion.setText("");
-			//txtIdGen.setText("");
 			cbGeneros.recargarCombo();
 			txtDirector.setText("");
 			txtEstreno.setText("");

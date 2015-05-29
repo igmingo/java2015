@@ -8,16 +8,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import java.awt.Font;
 
 public class _PpalFrame extends JFrame {
 	/**
@@ -25,6 +20,8 @@ public class _PpalFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel panel;
+	
+	private Usuario user = null;
 	
 	//MENUBAR
 	private JMenuBar menuBar;
@@ -40,11 +37,7 @@ public class _PpalFrame extends JFrame {
 	private JPanel pnUsuarios;
 	
 	//PANEL2
-	private JPanel pnLogin;
-	private JTextField txtEmail;
-	private JPasswordField txtPassword;
-	
-	public boolean logeado;
+	private LoginPanel pnLogin;
 	
 	public _PpalFrame() {
 		setResizable(false);
@@ -53,69 +46,18 @@ public class _PpalFrame extends JFrame {
 		getContentPane().setBounds(new Rectangle(0, 0, 500, 500));
 		getContentPane().setLayout(null);
 		
-		pnLogin = new JPanel();
+		/* PANEL DE LOGIN
+		 *
+		 **/
+		pnLogin = new LoginPanel();
 		pnLogin.setVisible(true);
 		pnLogin.setBounds(10, 11, 474, 425);
 		getContentPane().add(pnLogin);
 		pnLogin.setLayout(null);
 		
-		JLabel lblUsuariocorreo = new JLabel("Correo electr\u00F3nico");
-		lblUsuariocorreo.setBounds(112, 112, 250, 26);
-		pnLogin.add(lblUsuariocorreo);
-		lblUsuariocorreo.setFont(new Font("Dialog", Font.PLAIN, 20));
-		
-		txtEmail = new JTextField();
-		txtEmail.setBounds(112, 150, 250, 30);
-		pnLogin.add(txtEmail);
-		txtEmail.setColumns(10);
-		
-		JLabel lblContrasea = new JLabel("Contrase\u00F1a");
-		lblContrasea.setFont(new Font("Dialog", Font.PLAIN, 20));
-		lblContrasea.setBounds(112, 206, 174, 26);
-		pnLogin.add(lblContrasea);
-		
-		txtPassword = new JPasswordField();
-		txtPassword.setBounds(111, 244, 251, 30);
-		pnLogin.add(txtPassword);
-		txtPassword.setColumns(10);
-		
-		JButton btnLogin = new JButton("Entrar");
-		btnLogin.setBounds(192, 322, 89, 30);
-		pnLogin.add(btnLogin);
-		btnLogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				login();
-			}
-		});
-		
-		pnPrincipal = new JPanel();
-		pnPrincipal.setVisible(false);
-		pnPrincipal.setBounds(10, 11, 474, 425);
-		getContentPane().add(pnPrincipal);
-		pnPrincipal.setLayout(null);
-		
-		tabs = new JTabbedPane(JTabbedPane.TOP);
-		tabs.setBounds(0, 0, 474, 425);
-		pnPrincipal.add(tabs);
-		
-		pnPeliculas = new JPanel();
-		pnPeliculas.add(new PeliculasPanel());
-		pnPeliculas.setLayout(null);
-		tabs.addTab("Películas", null, pnPeliculas, null);
-		tabs.setEnabledAt(0, true);
-	
-		pnGeneros = new JPanel();
-		pnGeneros.add(new GenerosPanel());
-		pnGeneros.setLayout(null);
-		tabs.addTab("Géneros", null, pnGeneros, null);
-		tabs.setEnabledAt(1, true);
-		
-		pnUsuarios = new JPanel();
-		pnUsuarios.add(new UsuariosPanel());
-		pnUsuarios.setLayout(null);
-		tabs.addTab("Usuarios", null, pnUsuarios, null);
-		tabs.setEnabledAt(2, false);
-		
+		/* MENU
+		 *
+		 **/
 		menuBar = new JMenuBar();
 		menuBar.setVisible(false);
 		setJMenuBar(menuBar);
@@ -139,6 +81,41 @@ public class _PpalFrame extends JFrame {
 		JMenuItem mntmListado = new JMenuItem("Listado");
 		mnUsuarios.add(mntmListado);
 		
+		/* PANEL PRINCIPAL (CONTIENEN PESTAÑAS)
+		 *
+		 **/
+		pnPrincipal = new JPanel();
+		pnPrincipal.setVisible(false);
+		pnPrincipal.setBounds(10, 11, 474, 425);
+		getContentPane().add(pnPrincipal);
+		pnPrincipal.setLayout(null);
+		
+		/* PESTAÑAS */
+		tabs = new JTabbedPane(JTabbedPane.TOP);
+		tabs.setBounds(0, 0, 474, 425);
+		pnPrincipal.add(tabs);
+		
+		pnPeliculas = new JPanel();
+		pnPeliculas.add(new PeliculasPanel(user));
+		pnPeliculas.setLayout(null);
+		tabs.addTab("Películas", null, pnPeliculas, null);
+		tabs.setEnabledAt(0, true);
+	
+		pnGeneros = new JPanel();
+		pnGeneros.add(new GenerosPanel(user));
+		pnGeneros.setLayout(null);
+		tabs.addTab("Géneros", null, pnGeneros, null);
+		tabs.setEnabledAt(1, true);
+		
+		pnUsuarios = new JPanel();
+		pnUsuarios.add(new UsuariosPanel(user));
+		pnUsuarios.setLayout(null);
+		tabs.addTab("Usuarios", null, pnUsuarios, null);
+		tabs.setEnabledAt(2, false);
+		
+		/* EVENTOS
+		 *
+		 **/
 		mntmPelListado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				tabs.setSelectedIndex(0);
@@ -155,18 +132,20 @@ public class _PpalFrame extends JFrame {
 				tabs.setSelectedIndex(2);
 			}
 		});
-	}
-
-	protected void mostrarPanel(JPanel p) {
-		panel.removeAll();
-		panel.add(p);
-		panel.repaint();
-		panel.validate();
+		
+		pnLogin.btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				user = pnLogin.login();
+				if (user!=null) {
+					entrar(user);
+				}
+			}
+		});
+		
 	}
 	
-	private void login() {
-		Usuario userLogeado = new UsuariosBDD().login(txtEmail.getText(), new String(txtPassword.getPassword()));
-		logeado = (userLogeado!=null && userLogeado.getStatus()>0);
+	private void entrar(Usuario userLogeado) {
+		boolean logeado = (userLogeado.isLoged() && userLogeado.getStatus()>0);
 		menuBar.setVisible(logeado);
 		pnLogin.setVisible(!logeado);
 		pnPrincipal.setVisible(logeado);
@@ -186,6 +165,13 @@ public class _PpalFrame extends JFrame {
 		} else {
 			JOptionPane.showMessageDialog(null, "Acceso NO autorizado.", "Error", JOptionPane.WARNING_MESSAGE);
 		}
+	}
+
+	protected void mostrarPanel(JPanel p) {
+		panel.removeAll();
+		panel.add(p);
+		panel.repaint();
+		panel.validate();
 	}
 
 	public static void main(String[] args) {

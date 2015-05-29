@@ -7,13 +7,13 @@ public class Pelicula {
 	//`idGen`, `genero`
 	
 //	CLASE PELICULA
-	int id;
-	String titulo;
-	Integer duracion;
-	int idGenero;
-	String director;
-	String estreno;
-	String sinopsis;
+	private int id;
+	private String titulo;
+	private Integer duracion;
+	private int idGenero;
+	private String director;
+	private String estreno;
+	private String sinopsis;
 	
 	public Pelicula() {
 	}

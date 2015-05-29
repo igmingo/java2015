@@ -65,7 +65,6 @@ public class UsuariosBDD {
 							rs.getInt("id"),
 							rs.getString("nombre"),
 							rs.getString("email"),
-							rs.getString("password"),
 							rs.getBoolean("administrador"),
 							rs.getInt("estado")
 							)
@@ -101,7 +100,6 @@ public class UsuariosBDD {
 								rs.getInt("id"),
 								rs.getString("nombre"),
 								rs.getString("email"),
-								rs.getString("password"),
 								rs.getBoolean("administrador"),
 								rs.getInt("estado")
 								);
@@ -121,23 +119,21 @@ public class UsuariosBDD {
 		return u;
 	}
 	
-	public int Grabar(Usuario u) {	
+	public int Grabar(Usuario u) {
 		int respuesta = -1;
 		String sql = "";
 		if (u.getId()==0) {
 			sql = "INSERT INTO usuarios SET " +
-					"usuarios.nombre = '" + u.getEmail() + "' " + 
-					"usuarios.password = '" + u.getEmail() + "' " + 
-					"usuarios.estado = '" + u.getEmail() + "' " + 
-					"usuarios.administrador = '" + u.getEmail() + "' " + 
+					"usuarios.nombre = '" + u.getUsername() + "' " + 
+					"usuarios.estado = '" + u.getStatus() + "' " + 
+					"usuarios.administrador = '" + u.isAdmin() + "' " + 
 					"usuarios.email = '" + u.getEmail() + "'"
 					;
 		} else {
 			sql = "UPDATE usuarios SET " +
-					"usuarios.nombre = '" + u.getEmail() + "' " + 
-					"usuarios.password = '" + u.getEmail() + "' " + 
-					"usuarios.estado = '" + u.getEmail() + "' " + 
-					"usuarios.administrador = '" + u.getEmail() + "' " + 
+					"usuarios.nombre = '" + u.getUsername() + "' " + 
+					"usuarios.estado = '" + u.getStatus() + "' " + 
+					"usuarios.administrador = '" + u.isAdmin() + "' " + 
 					"usuarios.email = '" + u.getEmail() + "' " +
 					"WHERE usuarios.id = " + u.getId();
 					;
@@ -221,7 +217,6 @@ public class UsuariosBDD {
 							rs.getInt("id"),
 							rs.getString("nombre"),
 							rs.getString("email"),
-							rs.getString("password"),
 							rs.getBoolean("administrador"),
 							rs.getInt("estado")
 							);
@@ -236,6 +231,39 @@ public class UsuariosBDD {
 			e.printStackTrace();
 		}
 		return u;
+	}
+
+	public boolean ponerPassword(int id, String password) {
+		boolean respuesta = false;
+		String sql = "";
+		sql = "UPDATE usuarios SET " +
+				"usuarios.password = '" + password + "' " +
+				"WHERE usuarios.id = " + id;
+				;
+		System.out.println(sql);
+		// CREO UNA CONEXION
+		Connection c = new Conexion().getConection();
+		// SI LA CONEXION ES VALIDA
+		if (c!=null) {
+			// INTENTA REALIZAR EL SQL
+			try {
+				// Crea un ESTAMENTO (comando de ejecucion de un sql)
+				Statement comando = c.createStatement();
+				comando.execute(sql,Statement.RETURN_GENERATED_KEYS);
+				// COMPRUEBA si estamos en un Insert o en un Update
+				//
+				respuesta = comando.getUpdateCount()==1?true:false;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		//CERRAMOS LA CONEXION
+		try {
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return respuesta;
 	}
 	
 }

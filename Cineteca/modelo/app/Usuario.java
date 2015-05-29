@@ -7,20 +7,21 @@ public class Usuario {
 	private int id;
 	private String username;
 	private String email;
-	private String password;
 	private boolean isAdmin;
 	private int status;
+	
+	//PROPIEDAD QUE INDICA SI EL USUARIO SE HA LOGEADO
+	private boolean Loged;
 	
 	public Usuario(int id) {
 		this.id = id;
 	}
 
-	public Usuario(int id, String username, String email, String password,
+	public Usuario(int id, String username, String email,
 			boolean isAdmin, int status) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
-		this.password = password;
 		this.isAdmin = isAdmin;
 		this.status = status;
 	}
@@ -49,14 +50,6 @@ public class Usuario {
 		this.email = email;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public boolean isAdmin() {
 		return isAdmin;
 	}
@@ -71,6 +64,14 @@ public class Usuario {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public boolean isLoged() {
+		return Loged;
+	}
+
+	public void setLoged(boolean loged) {
+		Loged = loged;
 	}
 	
 }

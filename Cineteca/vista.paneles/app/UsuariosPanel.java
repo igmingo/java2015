@@ -1,28 +1,31 @@
 package app;
 import javax.swing.JPanel;
+
+import java.awt.Rectangle;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class PeliculasPanel extends JPanel {
+
+public class UsuariosPanel extends JPanel {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private JTextField textFiltro;
-	private PeliculasTabla tbPeliculas;
+	private UsuariosTabla tbUsuarios;
 
-	public PeliculasPanel() {
+	public UsuariosPanel(Usuario user) {
 		setBounds(new Rectangle(0, 0, 469, 397));
 		setLayout(null);
 		
-		JLabel lblFiltro = new JLabel("Pel\u00EDculas");
-		lblFiltro.setBounds(10, 11, 78, 16);
+		JLabel lblFiltro = new JLabel("Usuarios");
+		lblFiltro.setBounds(10, 11, 80, 16);
 		add(lblFiltro);
 		
 		textFiltro = new JTextField();
@@ -31,11 +34,11 @@ public class PeliculasPanel extends JPanel {
 		textFiltro.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 36, 449, 315);
+		scrollPane.setBounds(10, 36, 449, 316);
 		add(scrollPane);
 		
-		tbPeliculas = new PeliculasTabla(textFiltro.getText());
-		scrollPane.setViewportView(tbPeliculas);
+		tbUsuarios = new UsuariosTabla(textFiltro.getText());
+		scrollPane.setViewportView(tbUsuarios);
 		
 		JButton btnFiltrar = new JButton("Filtrar");
 		btnFiltrar.setBounds(370, 7, 89, 23);
@@ -47,17 +50,17 @@ public class PeliculasPanel extends JPanel {
 		
 		btnNuevo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				PeliculaDialogo dialogo = new PeliculaDialogo(0);
-				Pelicula newPelicula = dialogo.mostrar();
-				if (newPelicula!=null) {
-					tbPeliculas.actualizarTabla(textFiltro.getText());
+				GeneroDialogo dialogo = new GeneroDialogo(0);
+				Genero newGenero = dialogo.mostrar();
+				if (newGenero!=null) {
+					tbUsuarios.actualizarTabla(textFiltro.getText());
 				}
 			}
 		});
 		
 		btnFiltrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				tbPeliculas.actualizarTabla(textFiltro.getText());
+				tbUsuarios.actualizarTabla(textFiltro.getText());
 			}
 		});
 	}
