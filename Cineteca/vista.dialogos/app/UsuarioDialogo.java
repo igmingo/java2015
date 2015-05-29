@@ -29,10 +29,10 @@ public class UsuarioDialogo extends JDialog {
 	
 	public UsuarioDialogo(Usuario user, int id) {
 		this.usuario = user;
-		setTitle(user.getName());
+		setTitle(usuario.getName());
 		setResizable(false);
 		setModal(true);
-		setBounds(new Rectangle(0, 0, 600, 360));
+		setBounds(new Rectangle(0, 0, 380, 250));
 		getContentPane().setLayout(null);
 		
 		JLabel lblId = new JLabel("ID");

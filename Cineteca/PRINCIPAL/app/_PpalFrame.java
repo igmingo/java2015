@@ -31,7 +31,8 @@ public class _PpalFrame extends JFrame {
 	
 	//PANEL1
 	private JPanel pnPrincipal;
-	private JTabbedPane tabs;
+	
+	private JTabbedPane pnTabs;
 	private JPanel pnPeliculas;
 	private JPanel pnGeneros;
 	private JPanel pnUsuarios;
@@ -62,8 +63,8 @@ public class _PpalFrame extends JFrame {
 		menuBar.setVisible(false);
 		setJMenuBar(menuBar);
 		
-		JMenuItem mntmInfo = new JMenuItem("Videoteca");
-		menuBar.add(mntmInfo);
+		JMenuItem mntmConsultas = new JMenuItem("Consultas");
+		menuBar.add(mntmConsultas);
 		
 		mnPeliculas = new JMenu("Pel\u00EDculas");
 		menuBar.add(mnPeliculas);
@@ -81,7 +82,7 @@ public class _PpalFrame extends JFrame {
 		JMenuItem mntmListado = new JMenuItem("Listado");
 		mnUsuarios.add(mntmListado);
 		
-		/* PANEL PRINCIPAL (CONTIENEN PESTAÑAS)
+		/* PANEL PRINCIPAL (CONTIENE TABS)
 		 *
 		 **/
 		pnPrincipal = new JPanel();
@@ -90,43 +91,33 @@ public class _PpalFrame extends JFrame {
 		getContentPane().add(pnPrincipal);
 		pnPrincipal.setLayout(null);
 		
-		/* PESTAÑAS */
-		tabs = new JTabbedPane(JTabbedPane.TOP);
-		tabs.setBounds(0, 0, 474, 425);
-		pnPrincipal.add(tabs);
-		
-		pnPeliculas = new JPanel();
-		pnPeliculas.setLayout(null);
-		tabs.addTab("Películas", null, pnPeliculas, null);
-		tabs.setEnabledAt(0, true);
-	
-		pnGeneros = new JPanel();
-		pnGeneros.setLayout(null);
-		tabs.addTab("Géneros", null, pnGeneros, null);
-		tabs.setEnabledAt(1, true);
-		
-		pnUsuarios = new JPanel();
-		pnUsuarios.setLayout(null);
-		tabs.addTab("Usuarios", null, pnUsuarios, null);
-		tabs.setEnabledAt(2, false);
-		
 		/* EVENTOS
 		 *
 		 **/
+		
+		mntmConsultas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				pnPrincipal.removeAll();
+				pnPrincipal.add(new ConsultasPanel(user));
+				pnPrincipal.repaint();
+				pnPrincipal.validate();
+			}
+		});
+		/* TABULADORES */
 		mntmPelListado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				tabs.setSelectedIndex(0);
+				pnTabs.setSelectedIndex(0);
 			}
 		});
 		mntmGenListado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				tabs.setSelectedIndex(1);
+				pnTabs.setSelectedIndex(1);
 			}
 		});
 		
 		mntmListado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				tabs.setSelectedIndex(2);
+				pnTabs.setSelectedIndex(2);
 			}
 		});
 		
@@ -143,10 +134,37 @@ public class _PpalFrame extends JFrame {
 		
 	}
 	
+	private void cargarTabs() {
+		pnPrincipal.removeAll();
+		/* PESTAÑAS */
+		pnTabs = new JTabbedPane(JTabbedPane.TOP);
+		pnTabs.setBounds(0, 0, 474, 425);
+		pnPrincipal.add(pnTabs);
+		
+		/* CARGAR PANELES EN PESTAÑAS */
+		pnPeliculas = new JPanel();
+		pnPeliculas.setLayout(null);
+		pnTabs.addTab("Películas", null, pnPeliculas, null);
+		pnTabs.setEnabledAt(0, true);
+	
+		pnGeneros = new JPanel();
+		pnGeneros.setLayout(null);
+		pnTabs.addTab("Géneros", null, pnGeneros, null);
+		pnTabs.setEnabledAt(1, true);
+		
+		pnUsuarios = new JPanel();
+		pnUsuarios.setLayout(null);
+		pnTabs.addTab("Usuarios", null, pnUsuarios, null);
+		pnTabs.setEnabledAt(2, false);
+		pnPrincipal.repaint();
+		pnPrincipal.validate();
+	}
+
 	private void entrar(Usuario userLogeado) {
 		boolean logeado = (userLogeado.isLoged() && userLogeado.getStatus()>0);
 		if (logeado) {
-			cargarPaneles();
+			cargarTabs();
+			cargarPanelesEnTabs();
 			menuBar.setVisible(logeado);
 			pnLogin.setVisible(!logeado);
 			pnPrincipal.setVisible(logeado);
@@ -154,12 +172,12 @@ public class _PpalFrame extends JFrame {
 				mnPeliculas.setEnabled(logeado);
 				mnGeneros.setEnabled(logeado);
 				mnUsuarios.setEnabled(logeado);
-				tabs.setEnabledAt(2, logeado);
+				pnTabs.setEnabledAt(2, logeado);
 			} else {
 				mnPeliculas.setEnabled(logeado);
 				mnGeneros.setEnabled(logeado);
 				mnUsuarios.setEnabled(!logeado);
-				tabs.setEnabledAt(2, !logeado);
+				pnTabs.setEnabledAt(2, !logeado);
 			}
 			repaint();
 		} else {
@@ -179,13 +197,15 @@ public class _PpalFrame extends JFrame {
 		main.mostrar();
 	}
 	
-	private void cargarPaneles(){
+	private void cargarPanelesEnTabs(){
 		pnPeliculas.removeAll();
 		pnPeliculas.add(new PeliculasPanel(user));
 		pnGeneros.removeAll();
 		pnGeneros.add(new GenerosPanel(user));
 		pnUsuarios.removeAll();
 		pnUsuarios.add(new UsuariosPanel(user));
+		pnPrincipal.repaint();
+		pnPrincipal.validate();
 	}
 
 	private void mostrar() {

@@ -171,12 +171,12 @@ public class PeliculasBDD {
 		return respuesta;
 	}
 
-	public ArrayList<Vector<Object>> recuperaTablaPeliculas(String criterio) {
+	public ArrayList<Vector<Object>> recuperaTablaPeliculas(String filtro) {
 			// Devuelve una tabla, o Vector de Vectores de objetos
 			// `titulo`, `estreno`, `director`, `id`
 			ArrayList<Vector<Object>> tableData = null;
-			criterio = "WHERE peliculas.titulo LIKE '%" + criterio + "%'";
-			String sql = "SELECT peliculas.titulo, peliculas.estreno, peliculas.director, peliculas.id FROM peliculas " + criterio + " ORDER BY peliculas.titulo";
+			filtro = "WHERE peliculas.titulo LIKE '%" + filtro + "%'";
+			String sql = "SELECT peliculas.titulo, peliculas.estreno, peliculas.director, peliculas.id FROM peliculas " + filtro + " ORDER BY peliculas.titulo";
 			System.out.println(sql);
 			tableData = new ArrayList<>();
 			Connection c = new Conexion().getConection();
@@ -204,5 +204,37 @@ public class PeliculasBDD {
 			}
 			return tableData;
 	}
-	
+
+	public ArrayList<Vector<Object>> recuperaTablaConsulta(String filtro) {
+			// Devuelve una tabla, o Vector de Vectores de objetos
+			// `titulo`, `estreno`, `director`, `id`
+			ArrayList<Vector<Object>> tableData = null;
+			String sql = "SELECT * FROM peliculas " + filtro + " ORDER BY peliculas.titulo";
+			System.out.println(sql);
+			tableData = new ArrayList<>();
+			Connection c = new Conexion().getConection();
+			if (c!=null) {
+				try {
+					Statement comando = c.createStatement();
+					ResultSet rs = comando.executeQuery(sql);
+					while (rs.next() == true) {
+						//Los datos de la fila son un tipo VECTOR
+						Vector<Object> filaData = new Vector<>();
+						filaData.add(rs.getString("titulo"));
+						filaData.add(rs.getString("estreno"));
+						filaData.add(rs.getString("director"));
+						filaData.add(rs.getInt("id"));
+						tableData.add(filaData);
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				c.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return tableData;
+	}
 }
