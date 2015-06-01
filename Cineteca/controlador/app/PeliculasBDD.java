@@ -14,13 +14,11 @@ public class PeliculasBDD {
 	// generos
 	// `idGen`, `genero`
 
-	public ArrayList<Pelicula> RecuperaTodos (){
-		return Recupera("");
-	}
 	
-	public ArrayList<Pelicula> Recupera(String criterio) {
-		criterio = "WHERE peliculas.titulo LIKE '%" + criterio + "%'";
-		String sql = "SELECT * FROM peliculas " + criterio
+	//METODO PUBLICO
+	
+	public ArrayList<Pelicula> recuperaPorFiltro(String filtro) {
+		String sql = "SELECT * FROM peliculas, generos " + filtro
 				+ " ORDER BY peliculas.titulo";
 		System.out.println(sql);
 		ArrayList<Pelicula> lista = new ArrayList<>();
@@ -31,10 +29,13 @@ public class PeliculasBDD {
 				Statement comando = c.createStatement();
 				ResultSet rs = comando.executeQuery(sql);
 				while (rs.next() == true) {
-					lista.add(new Pelicula(rs.getInt("id"), rs
-							.getString("titulo"), rs.getInt("duracion"), rs
-							.getInt("idGen"), rs.getString("director"), rs
-							.getString("estreno"), rs.getString("sinopsis")));
+					lista.add(new Pelicula(rs.getInt("id"),
+							rs.getString("titulo"),
+							rs.getInt("duracion"), 
+							rs.getInt("idGen"),
+							rs.getString("director"),
+							rs.getString("estreno"),
+							rs.getString("sinopsis")));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -48,43 +49,82 @@ public class PeliculasBDD {
 		return lista;
 	}
 	
-	public Pelicula RecuperaPorId(int id) {
-		Pelicula peli = null;
-		if (id != 0) {
-			String sql = "SELECT * FROM peliculas " + "WHERE peliculas.id = "
-					+ id;
-			System.out.println(sql);
-			// CREO UNA CONEXION
-			Connection c = new Conexion().getConection();
-			if (c != null) {
-				try {
-					// Crea un ESTAMENTO (comando de ejecucion de un sql)
-					Statement comando = c.createStatement();
-					ResultSet rs = comando.executeQuery(sql);
-					if (rs.first()) {
-						peli = new Pelicula(
-								rs.getInt("id"),
-								rs.getString("titulo"), 
-								rs.getInt("duracion"),
-								rs.getInt("idGen"), 
-								rs.getString("director"),
-								rs.getString("estreno"),
-								rs.getString("sinopsis"));
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			try {
-				c.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		} else {
-			peli = new Pelicula(0);
-		}
-		return peli;
+	public String creaFiltro(Integer id, String titulo,
+			String genero, Integer desdeEstreno, Integer hastaEstreno,
+			Integer desdeDuracion, Integer hastaDuracion, String director) {
+		String filtro = "WHERE ";
+		filtro += id!=null?"id=" + id + " ":" peliculas.idGen = generos.idGen ";
+		filtro += titulo!=null?"AND peliculas.titulo LIKE '%" + titulo + "%' ":"";
+		filtro += genero!=null?"AND generos.genero LIKE '%" + genero + "%' ":"";
+		filtro += (desdeEstreno!=null || hastaEstreno!=null) ?"AND peliculas.estreno >=" + desdeEstreno + " AND peliculas.estreno <= " + hastaEstreno +" ":"";
+		filtro += (desdeDuracion!=null || hastaDuracion!=null) ?"AND peliculas.duracion >=" + desdeDuracion + " AND peliculas.duracion <= " + hastaDuracion +" ":"";
+		filtro += director!=null?"AND peliculas.director LIKE '%" + director + "%' ":"";
+		return filtro;
 	}
+	
+	public ArrayList<Pelicula> recuperaPorCampos(Integer id, String titulo,
+			String genero, Integer desdeEstreno, Integer hastaEstreno,
+			Integer desdeDuracion, Integer hastaDuracion, String director) {
+		String filtro = creaFiltro(id, titulo, genero, desdeEstreno,
+				hastaEstreno, desdeDuracion, hastaDuracion, director);
+		return recuperaPorFiltro(filtro);
+	}
+	
+	public ArrayList<Pelicula> recuperaPorTitulo(String criterio) {
+		String filtro = "WHERE peliculas.titulo LIKE '%" + criterio + "%'";
+		return recuperaPorFiltro(filtro);
+	}
+	
+	public ArrayList<Pelicula> recuperaTodos(){
+		return recuperaPorFiltro("WHERE 1");
+	}
+	
+	public Pelicula recuperaPorId(int id){
+		if (id != 0) {
+			String filtro = "WHERE peliculas.id = " + id;
+			ArrayList<Pelicula> lista = recuperaPorFiltro(filtro);
+			return lista.get(0);
+		} else {
+			return new Pelicula(0);
+		}
+	}
+	
+//	public Pelicula recuperaPorId(int id) {
+//		Pelicula peli = null;
+//		if (id != 0) {
+//			String sql = "SELECT * FROM peliculas " + "WHERE peliculas.id = " + id;
+//			System.out.println(sql);
+//			// CREO UNA CONEXION
+//			Connection c = new Conexion().getConection();
+//			if (c != null) {
+//				try {
+//					// Crea un ESTAMENTO (comando de ejecucion de un sql)
+//					Statement comando = c.createStatement();
+//					ResultSet rs = comando.executeQuery(sql);
+//					if (rs.first()) {
+//						peli = new Pelicula(
+//								rs.getInt("id"),
+//								rs.getString("titulo"), 
+//								rs.getInt("duracion"),
+//								rs.getInt("idGen"), 
+//								rs.getString("director"),
+//								rs.getString("estreno"),
+//								rs.getString("sinopsis"));
+//					}
+//				} catch (SQLException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//			try {
+//				c.close();
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+//		} else {
+//			peli = new Pelicula(0);
+//		}
+//		return peli;
+//	}
 	
 	public int Grabar(Pelicula peli) {
 		int respuesta = -1;
@@ -209,7 +249,7 @@ public class PeliculasBDD {
 			// Devuelve una tabla, o Vector de Vectores de objetos
 			// `titulo`, `estreno`, `director`, `id`
 			ArrayList<Vector<Object>> tableData = null;
-			String sql = "SELECT * FROM peliculas " + filtro + " ORDER BY peliculas.titulo";
+			String sql = "SELECT * FROM peliculas, generos " + filtro + " ORDER BY peliculas.titulo";
 			System.out.println(sql);
 			tableData = new ArrayList<>();
 			Connection c = new Conexion().getConection();
@@ -220,10 +260,12 @@ public class PeliculasBDD {
 					while (rs.next() == true) {
 						//Los datos de la fila son un tipo VECTOR
 						Vector<Object> filaData = new Vector<>();
+						filaData.add(rs.getInt("id"));
 						filaData.add(rs.getString("titulo"));
 						filaData.add(rs.getString("estreno"));
 						filaData.add(rs.getString("director"));
-						filaData.add(rs.getInt("id"));
+						filaData.add(rs.getString("genero"));
+						filaData.add(rs.getString("duracion"));
 						tableData.add(filaData);
 					}
 				} catch (SQLException e) {

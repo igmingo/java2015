@@ -3,6 +3,7 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -10,6 +11,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTable;
+
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
@@ -138,22 +140,24 @@ public class ConsultasPanel extends JPanel {
 		
 		btnFiltrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-//				if chkTitulo.isSelected()
-//				if chkGenero.isSelected()
-//				if chkEstreno.isSelected()
-//				if chkDuracion.isSelected()
-//				if chkDirector.isSelected()
-				
-				String filtro = recogerFiltro();
-				tbConsultas.actualizarTabla(filtro);
+				aplicarFiltro();
 			}
 		});
 		
 	}
-
-	protected String recogerFiltro() {
-
-		return null;
+	
+	protected void aplicarFiltro() {
+		tbConsultas.setFiltro(
+				null,
+				chkTitulo.isSelected() ? txtTitulo.getText() : null,
+				chkGenero.isSelected() ? txtGenero.getText() : null,
+				chkEstreno.isSelected() ? Utilidades.validarEntero(txtEstreno1.getText()) : null,
+				chkEstreno.isSelected() ? Utilidades.validarEntero(txtEstreno2.getText()) : null,
+				chkDuracion.isSelected() ? Utilidades.validarEntero(txtDuracion1.getText()) : null,
+				chkDuracion.isSelected() ? Utilidades.validarEntero(txtDuracion2.getText()) : null,
+				chkDirector.isSelected() ? txtDirector.getText() : null
+				);
+		System.out.println(tbConsultas.getFiltro());
+		tbConsultas.actualizarTabla();
 	}
 }

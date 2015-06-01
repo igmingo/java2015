@@ -17,7 +17,7 @@ public class UsuariosBDD {
 		// Encabezados 'Email', 'Usuario', 'ID'
 		ArrayList<Vector<Object>> tableData = null;
 		criterio = "WHERE usuarios.email LIKE '%" + criterio + "%'";
-		String sql = "SELECT usuarios.email, usuarios.nombre, usuarios.id  FROM usuarios " + criterio + " ORDER BY usuarios.email";
+		String sql = "SELECT usuarios.email, usuarios.nombre, usuarios.id FROM usuarios " + criterio + " ORDER BY usuarios.email";
 		System.out.println(sql);
 		tableData = new ArrayList<>();
 		Connection c = new Conexion().getConection();
@@ -202,6 +202,7 @@ public class UsuariosBDD {
 
 	public Usuario login(String text, String password) {
 		// TODO Apéndice de método generado automáticamente
+		password = Encriptacion.getMensajeEncriptado(password, Encriptacion.SHA256);
 		Usuario u = null;
 		String criterio = "WHERE usuarios.email='" + text + "' AND usuarios.password='" + password + "'";
 		String sql = "SELECT * FROM usuarios " + criterio + " ORDER BY usuarios.id";
@@ -235,6 +236,7 @@ public class UsuariosBDD {
 
 	public boolean ponerPassword(int id, String password) {
 		boolean respuesta = false;
+		password = Encriptacion.getMensajeEncriptado(password, Encriptacion.SHA256);
 		String sql = "";
 		sql = "UPDATE usuarios SET " +
 				"usuarios.password = '" + password + "' " +

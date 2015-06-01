@@ -18,6 +18,7 @@ public class ConsultasTabla extends JTable {
 	
 	public ConsultasTabla(Usuario user, String filtro) {
 		this.usuario = user;
+		this.filtro = filtro;
 		setModel(new DefaultTableModel(
 			new Object[][] {
 				{null, null, null, null, null, null},
@@ -56,16 +57,17 @@ public class ConsultasTabla extends JTable {
 						PeliculaDialogo dialog = new PeliculaDialogo (usuario, intId);
 						Pelicula p = dialog.mostrar();
 						if (p!=null) {
-							actualizarTabla(filtro);
+							actualizarTabla();
 						}
 				}
 			}
 		});
 	}
 	
-	public void actualizarTabla(String filtro) {
-		this.setFiltro(filtro);
-		ArrayList<Vector<Object>> tabla = new PeliculasBDD().recuperaTablaConsulta(filtro);
+	
+	
+	public void actualizarTabla() {
+		ArrayList<Vector<Object>> tabla = new PeliculasBDD().recuperaTablaConsulta(this.filtro);
 		DefaultTableModel dtm = (DefaultTableModel) getModel();
 		dtm.setRowCount(0);
 		for (Vector<Object> fila : tabla) {
@@ -79,6 +81,13 @@ public class ConsultasTabla extends JTable {
 
 	public void setFiltro(String filtro) {
 		this.filtro = filtro;
+	}
+	
+	public void setFiltro(Integer id, String titulo,
+			String genero, Integer desdeEstreno, Integer hastaEstreno,
+			Integer desdeDuracion, Integer hastaDuracion, String director) {
+		this.filtro = new PeliculasBDD().creaFiltro(id, titulo, genero, desdeEstreno,
+				hastaEstreno, desdeDuracion, hastaDuracion, director);
 	}
 
 }

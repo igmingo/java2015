@@ -142,7 +142,7 @@ public class PeliculaDialogo extends JDialog {
 				setVisible(false);
 			}
 		});
-		setForm(new PeliculasBDD().RecuperaPorId(id));
+		setForm(new PeliculasBDD().recuperaPorId(id));
 	}
 	
 	private void eliminar(int id) {

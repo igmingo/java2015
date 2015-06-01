@@ -19,9 +19,9 @@ public class _PpalFrame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JPanel panel;
+//	private JPanel panel;
 	
-	private Usuario user = null;
+	private Usuario userPpal = null;
 	
 	//MENUBAR
 	private JMenuBar menuBar;
@@ -39,6 +39,9 @@ public class _PpalFrame extends JFrame {
 	
 	//PANEL2
 	private LoginPanel pnLogin;
+	private JMenuItem mntmNuevaPelcula;
+	private JMenuItem mntmNuevoGnero;
+	private JMenuItem mntmNuevoUsuario;
 	
 	public _PpalFrame() {
 		setResizable(false);
@@ -66,21 +69,33 @@ public class _PpalFrame extends JFrame {
 		JMenuItem mntmConsultas = new JMenuItem("Consultas");
 		menuBar.add(mntmConsultas);
 		
+		JMenuItem mntmEditarDatos = new JMenuItem("Editar Datos");
+		menuBar.add(mntmEditarDatos);
+		
 		mnPeliculas = new JMenu("Pel\u00EDculas");
 		menuBar.add(mnPeliculas);
 		JMenuItem mntmPelListado = new JMenuItem("Listado");
 		mnPeliculas.add(mntmPelListado);
+		
+		mntmNuevaPelcula = new JMenuItem("Nueva Pel\u00EDcula");
+		mnPeliculas.add(mntmNuevaPelcula);
 		
 		mnGeneros = new JMenu("G\u00E9neros");
 		menuBar.add(mnGeneros);
 		JMenuItem mntmGenListado = new JMenuItem("Listado");
 		mnGeneros.add(mntmGenListado);
 		
+		mntmNuevoGnero = new JMenuItem("Nuevo G\u00E9nero");
+		mnGeneros.add(mntmNuevoGnero);
+		
 		mnUsuarios = new JMenu("Usuarios");
 		mnUsuarios.setEnabled(false);
 		menuBar.add(mnUsuarios);
 		JMenuItem mntmListado = new JMenuItem("Listado");
 		mnUsuarios.add(mntmListado);
+		
+		mntmNuevoUsuario = new JMenuItem("Nuevo Usuario");
+		mnUsuarios.add(mntmNuevoUsuario);
 		
 		/* PANEL PRINCIPAL (CONTIENE TABS)
 		 *
@@ -97,8 +112,9 @@ public class _PpalFrame extends JFrame {
 		
 		mntmConsultas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				//Elimina todos los paneles de pnPrincipal
 				pnPrincipal.removeAll();
-				pnPrincipal.add(new ConsultasPanel(user));
+				pnPrincipal.add(new ConsultasPanel(userPpal));
 				pnPrincipal.repaint();
 				pnPrincipal.validate();
 			}
@@ -106,28 +122,72 @@ public class _PpalFrame extends JFrame {
 		/* TABULADORES */
 		mntmPelListado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				cargarTabs();
+				cargarPanelesEnTabs();
 				pnTabs.setSelectedIndex(0);
 			}
 		});
 		mntmGenListado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				cargarTabs();
+				cargarPanelesEnTabs();
 				pnTabs.setSelectedIndex(1);
 			}
 		});
 		
 		mntmListado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				cargarTabs();
+				cargarPanelesEnTabs();
 				pnTabs.setSelectedIndex(2);
 			}
 		});
 		
 		pnLogin.btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				user = pnLogin.login();
-				if (user!=null) {
-					entrar(user);
-					setTitle(user.getName());
-					System.out.println(user.getName());
+				userPpal = pnLogin.login();
+				if (userPpal!=null) {
+					entrar(userPpal);
+					setTitle(userPpal.getName());
+					System.out.println(userPpal.getName());
+				}
+			}
+		});
+		
+		mntmEditarDatos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cargarTabs();
+				cargarPanelesEnTabs();
+				pnTabs.setSelectedIndex(0);
+			}
+		});
+		
+		mntmNuevaPelcula.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PeliculaDialogo dialogo = new PeliculaDialogo(userPpal, 0);
+				Pelicula newPelicula = dialogo.mostrar();
+				if (newPelicula!=null) {
+					JOptionPane.showMessageDialog(null, "Pelicula añadida.");
+				}
+			}
+		});
+		
+		mntmNuevoGnero.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GeneroDialogo dialogo = new GeneroDialogo(userPpal, 0);
+				Genero newGenero = dialogo.mostrar();
+				if (newGenero!=null) {
+					JOptionPane.showMessageDialog(null, "Género añadido.");
+				}
+			}
+		});
+		
+		mntmNuevoUsuario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UsuarioDialogo dialogo = new UsuarioDialogo(userPpal, 0);
+				Usuario newUsuario = dialogo.mostrar();
+				if (newUsuario!=null) {
+					JOptionPane.showMessageDialog(null, "Usuario añadido.");
 				}
 			}
 		});
@@ -145,17 +205,18 @@ public class _PpalFrame extends JFrame {
 		pnPeliculas = new JPanel();
 		pnPeliculas.setLayout(null);
 		pnTabs.addTab("Películas", null, pnPeliculas, null);
-		pnTabs.setEnabledAt(0, true);
+		pnTabs.setEnabledAt(0, (userPpal.isLoged() && userPpal.getStatus()>0) );
 	
 		pnGeneros = new JPanel();
 		pnGeneros.setLayout(null);
 		pnTabs.addTab("Géneros", null, pnGeneros, null);
-		pnTabs.setEnabledAt(1, true);
+		pnTabs.setEnabledAt(1, (userPpal.isLoged() && userPpal.getStatus()>0) );
 		
 		pnUsuarios = new JPanel();
 		pnUsuarios.setLayout(null);
 		pnTabs.addTab("Usuarios", null, pnUsuarios, null);
-		pnTabs.setEnabledAt(2, false);
+		pnTabs.setEnabledAt(2, (userPpal.isLoged() && userPpal.isAdmin() && userPpal.getStatus()>0) );
+		
 		pnPrincipal.repaint();
 		pnPrincipal.validate();
 	}
@@ -172,12 +233,10 @@ public class _PpalFrame extends JFrame {
 				mnPeliculas.setEnabled(logeado);
 				mnGeneros.setEnabled(logeado);
 				mnUsuarios.setEnabled(logeado);
-				pnTabs.setEnabledAt(2, logeado);
 			} else {
 				mnPeliculas.setEnabled(logeado);
 				mnGeneros.setEnabled(logeado);
 				mnUsuarios.setEnabled(!logeado);
-				pnTabs.setEnabledAt(2, !logeado);
 			}
 			repaint();
 		} else {
@@ -185,12 +244,12 @@ public class _PpalFrame extends JFrame {
 		}
 	}
 
-	protected void mostrarPanel(JPanel p) {
-		panel.removeAll();
-		panel.add(p);
-		panel.repaint();
-		panel.validate();
-	}
+//	protected void mostrarPanel(JPanel p) {
+//		panel.removeAll();
+//		panel.add(p);
+//		panel.repaint();
+//		panel.validate();
+//	}
 
 	public static void main(String[] args) {
 		_PpalFrame main = new _PpalFrame();
@@ -199,11 +258,11 @@ public class _PpalFrame extends JFrame {
 	
 	private void cargarPanelesEnTabs(){
 		pnPeliculas.removeAll();
-		pnPeliculas.add(new PeliculasPanel(user));
+		pnPeliculas.add(new PeliculasPanel(userPpal));
 		pnGeneros.removeAll();
-		pnGeneros.add(new GenerosPanel(user));
+		pnGeneros.add(new GenerosPanel(userPpal));
 		pnUsuarios.removeAll();
-		pnUsuarios.add(new UsuariosPanel(user));
+		pnUsuarios.add(new UsuariosPanel(userPpal));
 		pnPrincipal.repaint();
 		pnPrincipal.validate();
 	}

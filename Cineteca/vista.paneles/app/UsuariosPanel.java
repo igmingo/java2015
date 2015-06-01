@@ -52,9 +52,9 @@ public class UsuariosPanel extends JPanel {
 		
 		btnNuevo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				GeneroDialogo dialogo = new GeneroDialogo(usuario, 0);
-				Genero newGenero = dialogo.mostrar();
-				if (newGenero!=null) {
+				UsuarioDialogo dialogo = new UsuarioDialogo(usuario, 0);
+				Usuario newUsuario = dialogo.mostrar();
+				if (newUsuario!=null) {
 					tbUsuarios.actualizarTabla(textFiltro.getText());
 				}
 			}

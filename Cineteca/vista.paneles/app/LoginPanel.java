@@ -52,6 +52,7 @@ public class LoginPanel extends JPanel {
 	}
 
 	public Usuario login() {
+		System.out.println(Encriptacion.getMensajeEncriptado(new String(txtPassword.getPassword()), Encriptacion.SHA256));
 		Usuario user = new UsuariosBDD().login(txtEmail.getText(), new String(txtPassword.getPassword()));
 		if (user!=null && user.getStatus()>0) {
 			user.setLoged(true);
