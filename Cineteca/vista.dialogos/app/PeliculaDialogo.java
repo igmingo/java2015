@@ -1,6 +1,7 @@
 package app;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -11,6 +12,15 @@ import javax.swing.JTextArea;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
 
 public class PeliculaDialogo extends JDialog {
 	/**
@@ -25,13 +35,14 @@ public class PeliculaDialogo extends JDialog {
 	private JTextField txtEstreno;
 	private JTextArea txtSinopsis;
 	private Usuario usuario;
+	private Caratula lblCaratula;
 
 	public PeliculaDialogo(Usuario user, int id) {
 		this.usuario = user;
 		setTitle(usuario.getName());
 		setResizable(false);
 		setModal(true);
-		setBounds(new Rectangle(0, 0, 600, 360));
+		setBounds(new Rectangle(0, 0, 875, 450));
 		getContentPane().setLayout(null);
 		
 		JLabel lblId = new JLabel("ID");
@@ -43,23 +54,23 @@ public class PeliculaDialogo extends JDialog {
 		getContentPane().add(lblTtulo);
 		
 		JLabel lblDuracin = new JLabel("Duraci\u00F3n");
-		lblDuracin.setBounds(10, 61, 77, 14);
+		lblDuracin.setBounds(371, 92, 77, 14);
 		getContentPane().add(lblDuracin);
 		
 		JLabel lblGnero = new JLabel("G\u00E9nero");
-		lblGnero.setBounds(10, 86, 77, 14);
+		lblGnero.setBounds(10, 92, 77, 14);
 		getContentPane().add(lblGnero);
 		
 		JLabel lblDirector = new JLabel("Director");
-		lblDirector.setBounds(10, 111, 77, 14);
+		lblDirector.setBounds(204, 64, 83, 14);
 		getContentPane().add(lblDirector);
 		
 		JLabel lblEstreno = new JLabel("Estreno");
-		lblEstreno.setBounds(10, 136, 77, 14);
+		lblEstreno.setBounds(10, 64, 77, 14);
 		getContentPane().add(lblEstreno);
 		
 		JLabel lblSinopsis = new JLabel("Sinopsis");
-		lblSinopsis.setBounds(10, 161, 77, 14);
+		lblSinopsis.setBounds(10, 120, 77, 14);
 		getContentPane().add(lblSinopsis);
 		
 		txtId = new JTextField();
@@ -77,28 +88,28 @@ public class PeliculaDialogo extends JDialog {
 		
 		txtDuracion = new JTextField();
 		txtDuracion.setText("duracion");
-		txtDuracion.setBounds(97, 58, 114, 20);
+		txtDuracion.setBounds(458, 89, 114, 20);
 		getContentPane().add(txtDuracion);
 		txtDuracion.setColumns(10);
 		
 		cbGeneros = new GenerosCombo();
-		cbGeneros.setBounds(97, 83, 219, 20);
+		cbGeneros.setBounds(97, 89, 219, 20);
 		getContentPane().add(cbGeneros);
 		
 		txtDirector = new JTextField();
 		txtDirector.setText("director");
-		txtDirector.setBounds(97, 108, 475, 20);
+		txtDirector.setBounds(291, 61, 281, 20);
 		getContentPane().add(txtDirector);
 		txtDirector.setColumns(10);
 		
 		txtEstreno = new JTextField();
 		txtEstreno.setText("estreno");
-		txtEstreno.setBounds(97, 133, 114, 20);
+		txtEstreno.setBounds(97, 61, 58, 20);
 		getContentPane().add(txtEstreno);
 		txtEstreno.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(93, 161, 479, 90);
+		scrollPane.setBounds(97, 118, 475, 221);
 		getContentPane().add(scrollPane);
 		
 		txtSinopsis = new JTextArea();
@@ -107,7 +118,7 @@ public class PeliculaDialogo extends JDialog {
 		scrollPane.setViewportView(txtSinopsis);
 		
 		JPanel pnBotones = new JPanel();
-		pnBotones.setBounds(107, 263, 370, 60);
+		pnBotones.setBounds(97, 351, 370, 60);
 		getContentPane().add(pnBotones);
 		pnBotones.setOpaque(false);
 		pnBotones.setLayout(null);
@@ -124,6 +135,18 @@ public class PeliculaDialogo extends JDialog {
 		JButton btnCancelar = new JButton("CANCELAR");
 		btnCancelar.setBounds(256, 17, 98, 26);
 		pnBotones.add(btnCancelar);
+		
+		lblCaratula = new Caratula("Car\u00E1tula");
+		lblCaratula.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				elegirCaratula();
+			}
+		});
+		lblCaratula.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		lblCaratula.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCaratula.setBounds(590, 11, 270, 400);
+		getContentPane().add(lblCaratula);
 		
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -145,6 +168,25 @@ public class PeliculaDialogo extends JDialog {
 		setForm(new PeliculasBDD().recuperaPorId(id));
 	}
 	
+	protected void elegirCaratula() {
+		JFileChooser fc = new JFileChooser();
+		File dir = new File("C:/windows/");
+		fc.setCurrentDirectory(dir);
+		
+		FileFilter ff = null;
+//		ff = new FileNameExtensionFilter("Archivos de texto", "txt");
+		fc.addChoosableFileFilter(ff);
+		ff = new FileNameExtensionFilter("Archivos gráficos", "png", "gif", "jpg");
+		fc.addChoosableFileFilter(ff);
+		
+		int respuesta = fc.showOpenDialog(null);
+		
+		if (respuesta == JFileChooser.APPROVE_OPTION) {
+			File archivo = fc.getSelectedFile();
+			lblCaratula.setImagenCaratula(archivo, lblCaratula.getWidth(), lblCaratula.getHeight());
+		}
+	}
+
 	private void eliminar(int id) {
 		int pregunta = JOptionPane.showConfirmDialog(null, "¿Desea eliminar la Película?\n", "Eliminar Pelicula", JOptionPane.OK_CANCEL_OPTION);
 		if (pregunta==JOptionPane.OK_OPTION) {
@@ -180,6 +222,7 @@ public class PeliculaDialogo extends JDialog {
 			txtDirector.setText(p.getDirector());
 			txtEstreno.setText(p.getEstreno());
 			txtSinopsis.setText(p.getSinopsis());
+			lblCaratula.setCaratulaByPath(_PpalFrame.CARATULAS_CARPETA + p.getCaratula(), lblCaratula.getWidth(), lblCaratula.getHeight());
 		} else {
 			txtId.setText("");
 			txtTitulo.setText("");
@@ -202,7 +245,8 @@ public class PeliculaDialogo extends JDialog {
 			String director = Utilidades.validarString(txtDirector.getText());
 			String estreno = Utilidades.validarString(txtEstreno.getText());
 			String sinopsis = Utilidades.validarString(txtSinopsis.getText());
-			p = new Pelicula(id, titulo, duracion, idGenero, director, estreno, sinopsis);
+			String caratula = lblCaratula.getNombreCaratula();
+			p = new Pelicula(id, titulo, duracion, idGenero, director, estreno, sinopsis, caratula);
 		}
 		return p;
 	}

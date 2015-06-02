@@ -35,7 +35,9 @@ public class PeliculasBDD {
 							rs.getInt("idGen"),
 							rs.getString("director"),
 							rs.getString("estreno"),
-							rs.getString("sinopsis")));
+							rs.getString("sinopsis"),
+							rs.getString("caratula")
+							));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -136,7 +138,8 @@ public class PeliculasBDD {
 					"peliculas.idGen = " + peli.getIdGenero() + ", " +
 					"peliculas.director = '" + peli.getDirector() + "', " +
 					"peliculas.estreno = '" + peli.getEstreno() + "', " +
-					"peliculas.sinopsis = '" + peli.getSinopsis() + "'"
+					"peliculas.sinopsis = '" + peli.getSinopsis() + "', " +
+					"peliculas.caratula = '" + peli.getCaratula() + "'"
 					;
 		} else {
 			sql = "UPDATE peliculas SET " +
@@ -145,7 +148,8 @@ public class PeliculasBDD {
 					"peliculas.idGen = " + peli.getIdGenero() + ", " +
 					"peliculas.director = '" + peli.getDirector() + "', " +
 					"peliculas.estreno = '" + peli.getEstreno() + "', " +
-					"peliculas.sinopsis = '" + peli.getSinopsis() + "' " +
+					"peliculas.sinopsis = '" + peli.getSinopsis() + "', " +
+					"peliculas.caratula = '" + peli.getCaratula() + "' " +
 					"WHERE peliculas.id = " + peli.getId();
 					;
 		}
@@ -211,6 +215,9 @@ public class PeliculasBDD {
 		return respuesta;
 	}
 
+	
+	//RECUPERAR TABLAS ESPECIALES
+	
 	public ArrayList<Vector<Object>> recuperaTablaPeliculas(String filtro) {
 			// Devuelve una tabla, o Vector de Vectores de objetos
 			// `titulo`, `estreno`, `director`, `id`
@@ -246,8 +253,9 @@ public class PeliculasBDD {
 	}
 
 	public ArrayList<Vector<Object>> recuperaTablaConsulta(String filtro) {
+			//Crea una tabla especial con algunos datos
 			// Devuelve una tabla, o Vector de Vectores de objetos
-			// `titulo`, `estreno`, `director`, `id`
+			// `id`, `titulo`, `estreno`, `director`, genero, duracion
 			ArrayList<Vector<Object>> tableData = null;
 			String sql = "SELECT * FROM peliculas, generos " + filtro + " ORDER BY peliculas.titulo";
 			System.out.println(sql);

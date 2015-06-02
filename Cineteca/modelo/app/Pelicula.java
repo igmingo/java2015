@@ -14,6 +14,7 @@ public class Pelicula {
 	private String director;
 	private String estreno;
 	private String sinopsis;
+	private String caratula;
 	
 	public Pelicula() {
 	}
@@ -31,7 +32,7 @@ public class Pelicula {
 	}
 
 	public Pelicula(int id, String titulo, Integer duracion, int idGenero,
-			String director, String estreno, String sinopsis) {
+			String director, String estreno, String sinopsis, String caratula) {
 		this.id = id;
 		this.titulo = titulo;
 		this.duracion = duracion;
@@ -39,6 +40,7 @@ public class Pelicula {
 		this.director = director;
 		this.estreno = estreno;
 		this.sinopsis = sinopsis;
+		this.caratula = caratula;
 	}
 	
 	public int getId() {
@@ -82,6 +84,14 @@ public class Pelicula {
 	}
 	public void setSinopsis(String sinopsis) {
 		this.sinopsis = sinopsis;
+	}
+
+	public String getCaratula() {
+		return caratula;
+	}
+
+	public void setCaratula(String caratula) {
+		this.caratula = caratula;
 	}
 	
 }

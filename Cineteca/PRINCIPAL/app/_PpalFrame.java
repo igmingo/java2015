@@ -18,6 +18,8 @@ public class _PpalFrame extends JFrame {
 	/**
 	 * 
 	 */
+	
+	public static final String CARATULAS_CARPETA = "./covers/";
 	private static final long serialVersionUID = 1L;
 //	private JPanel panel;
 	
