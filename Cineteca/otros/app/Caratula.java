@@ -70,11 +70,19 @@ public class Caratula extends JLabel {
 	}
 	
 	public String getRutaCaratula() {
+		if (archivoCaratula!=null) {
 		return archivoCaratula.getName();
+		} else {
+			return null;
+		}
 	}
 	
 	public String getNombreCaratula() {
-		return archivoCaratula.getName();
+		if (archivoCaratula!=null) {
+			return archivoCaratula.getName();
+		} else {
+			return null;
+		}
 	}
 	
 	//Getters y Setters

@@ -149,13 +149,13 @@ public class ConsultasPanel extends JPanel {
 	protected void aplicarFiltro() {
 		tbConsultas.setFiltro(
 				null,
-				chkTitulo.isSelected() ? txtTitulo.getText() : null,
-				chkGenero.isSelected() ? txtGenero.getText() : null,
+				chkTitulo.isSelected() ? txtTitulo.getText().trim() : null,
+				chkGenero.isSelected() ? txtGenero.getText().trim() : null,
 				chkEstreno.isSelected() ? Utilidades.validarEntero(txtEstreno1.getText()) : null,
 				chkEstreno.isSelected() ? Utilidades.validarEntero(txtEstreno2.getText()) : null,
 				chkDuracion.isSelected() ? Utilidades.validarEntero(txtDuracion1.getText()) : null,
 				chkDuracion.isSelected() ? Utilidades.validarEntero(txtDuracion2.getText()) : null,
-				chkDirector.isSelected() ? txtDirector.getText() : null
+				chkDirector.isSelected() ? txtDirector.getText().trim() : null
 				);
 		System.out.println(tbConsultas.getFiltro());
 		tbConsultas.actualizarTabla();

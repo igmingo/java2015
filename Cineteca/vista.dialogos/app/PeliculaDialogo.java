@@ -33,7 +33,7 @@ public class PeliculaDialogo extends JDialog {
 	private GenerosCombo cbGeneros;
 	private JTextField txtDirector;
 	private JTextField txtEstreno;
-	private JTextArea txtSinopsis;
+	private JTextArea taSinopsis;
 	private Usuario usuario;
 	private Caratula lblCaratula;
 
@@ -112,10 +112,12 @@ public class PeliculaDialogo extends JDialog {
 		scrollPane.setBounds(97, 118, 475, 221);
 		getContentPane().add(scrollPane);
 		
-		txtSinopsis = new JTextArea();
-		txtSinopsis.setLocation(97, 0);
-		txtSinopsis.setText("sinopsis");
-		scrollPane.setViewportView(txtSinopsis);
+		taSinopsis = new JTextArea();
+		taSinopsis.setWrapStyleWord(true);
+		taSinopsis.setLineWrap(true);
+		taSinopsis.setLocation(97, 0);
+		taSinopsis.setText("sinopsis");
+		scrollPane.setViewportView(taSinopsis);
 		
 		JPanel pnBotones = new JPanel();
 		pnBotones.setBounds(97, 351, 370, 60);
@@ -174,11 +176,12 @@ public class PeliculaDialogo extends JDialog {
 		fc.setCurrentDirectory(dir);
 		
 		FileFilter ff = null;
-//		ff = new FileNameExtensionFilter("Archivos de texto", "txt");
+//		ff = new FileNameExtensionFilter("Archivo de Video", "avi");
 		fc.addChoosableFileFilter(ff);
-		ff = new FileNameExtensionFilter("Archivos gráficos", "png", "gif", "jpg");
+		ff = new FileNameExtensionFilter("Archivos gráficos", "png", "gif", "jpg", "jpeg");
 		fc.addChoosableFileFilter(ff);
-		
+		//Así quita la posibilidad de que elija otras extensiones
+		fc.setAcceptAllFileFilterUsed(false);
 		int respuesta = fc.showOpenDialog(null);
 		
 		if (respuesta == JFileChooser.APPROVE_OPTION) {
@@ -213,15 +216,11 @@ public class PeliculaDialogo extends JDialog {
 		if (p!=null) {
 			txtId.setText("" + p.getId());
 			txtTitulo.setText(p.getTitulo());
-			if (p.getDuracion()!=null) {
-				txtDuracion.setText("" + p.getDuracion() );
-			} else {
-				txtDuracion.setText("");
-			}
+			txtDuracion.setText(p.getDuracion()!=null?"" + p.getDuracion():"");
 			cbGeneros.recargarCombo(p.getIdGenero());
-			txtDirector.setText(p.getDirector());
-			txtEstreno.setText(p.getEstreno());
-			txtSinopsis.setText(p.getSinopsis());
+			txtDirector.setText(p.getDirector()!=null?p.getDirector():"");
+			txtEstreno.setText(p.getEstreno()!=null?p.getEstreno():"");
+			taSinopsis.setText(p.getSinopsis()!=null?p.getSinopsis():"");
 			lblCaratula.setCaratulaByPath(_PpalFrame.CARATULAS_CARPETA + p.getCaratula(), lblCaratula.getWidth(), lblCaratula.getHeight());
 		} else {
 			txtId.setText("");
@@ -230,7 +229,7 @@ public class PeliculaDialogo extends JDialog {
 			cbGeneros.recargarCombo();
 			txtDirector.setText("");
 			txtEstreno.setText("");
-			txtSinopsis.setText("");
+			taSinopsis.setText("");
 		}
 	}
 	
@@ -244,7 +243,7 @@ public class PeliculaDialogo extends JDialog {
 			int idGenero = cbGeneros.getSelectedIdGen();
 			String director = Utilidades.validarString(txtDirector.getText());
 			String estreno = Utilidades.validarString(txtEstreno.getText());
-			String sinopsis = Utilidades.validarString(txtSinopsis.getText());
+			String sinopsis = Utilidades.validarString(taSinopsis.getText());
 			String caratula = lblCaratula.getNombreCaratula();
 			p = new Pelicula(id, titulo, duracion, idGenero, director, estreno, sinopsis, caratula);
 		}

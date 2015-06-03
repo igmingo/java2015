@@ -19,7 +19,7 @@ public class _PpalFrame extends JFrame {
 	 * 
 	 */
 	
-	public static final String CARATULAS_CARPETA = "./covers/";
+	public static String CARATULAS_CARPETA = "./covers/";
 	private static final long serialVersionUID = 1L;
 //	private JPanel panel;
 	
@@ -254,10 +254,16 @@ public class _PpalFrame extends JFrame {
 //	}
 
 	public static void main(String[] args) {
+		//configuracion.cargar();
 		_PpalFrame main = new _PpalFrame();
 		main.mostrar();
 	}
 	
+	private static void cargarConfiguracion() {
+	// TODO Apéndice de método generado automáticamente
+	
+}
+
 	private void cargarPanelesEnTabs(){
 		pnPeliculas.removeAll();
 		pnPeliculas.add(new PeliculasPanel(userPpal));

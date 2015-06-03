@@ -11,7 +11,7 @@ public class LoginPanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JEmailField txtEmail;
+	private CorreoField txtEmail;
 	private JPasswordField txtPassword;
 	private Usuario usuarioPanel;
 	public JButton btnLogin;
@@ -26,7 +26,7 @@ public class LoginPanel extends JPanel {
 		add(lblUsuariocorreo);
 		lblUsuariocorreo.setFont(new Font("Dialog", Font.PLAIN, 20));
 		
-		txtEmail = new JEmailField();
+		txtEmail = new CorreoField();
 		txtEmail.setBounds(112, 150, 250, 30);
 		add(txtEmail);
 		txtEmail.setColumns(10);
