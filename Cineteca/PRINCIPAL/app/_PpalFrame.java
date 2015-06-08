@@ -19,10 +19,8 @@ public class _PpalFrame extends JFrame {
 	 * 
 	 */
 	
-	public static String CARATULAS_CARPETA = "./covers/";
+	//public static String CARATULAS_CARPETA = "./covers/";
 	private static final long serialVersionUID = 1L;
-//	private JPanel panel;
-	
 	private Usuario userPpal = null;
 	
 	//MENUBAR
@@ -46,6 +44,7 @@ public class _PpalFrame extends JFrame {
 	private JMenuItem mntmNuevoUsuario;
 	
 	public _PpalFrame() {
+		
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(new Rectangle(0, 0, 500, 500));
@@ -254,15 +253,12 @@ public class _PpalFrame extends JFrame {
 //	}
 
 	public static void main(String[] args) {
-		//configuracion.cargar();
-		_PpalFrame main = new _PpalFrame();
-		main.mostrar();
+		if(Configuracion.loadConfigMap()){
+			_PpalFrame main = new _PpalFrame();
+			//System.out.println(Configuracion.getPathCovers().getPath());
+			main.mostrar();
+		}
 	}
-	
-	private static void cargarConfiguracion() {
-	// TODO Apéndice de método generado automáticamente
-	
-}
 
 	private void cargarPanelesEnTabs(){
 		pnPeliculas.removeAll();

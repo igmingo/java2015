@@ -186,7 +186,7 @@ public class PeliculaDialogo extends JDialog {
 		
 		if (respuesta == JFileChooser.APPROVE_OPTION) {
 			File archivo = fc.getSelectedFile();
-			lblCaratula.setImagenCaratula(archivo, lblCaratula.getWidth(), lblCaratula.getHeight());
+			lblCaratula.setCaratulaByPath(archivo, lblCaratula.getWidth(), lblCaratula.getHeight());
 		}
 	}
 
@@ -221,7 +221,8 @@ public class PeliculaDialogo extends JDialog {
 			txtDirector.setText(p.getDirector()!=null?p.getDirector():"");
 			txtEstreno.setText(p.getEstreno()!=null?p.getEstreno():"");
 			taSinopsis.setText(p.getSinopsis()!=null?p.getSinopsis():"");
-			lblCaratula.setCaratulaByPath(_PpalFrame.CARATULAS_CARPETA + p.getCaratula(), lblCaratula.getWidth(), lblCaratula.getHeight());
+			File fileCaratula = new File(Configuracion.getPathCovers(), p.getCaratula());
+			lblCaratula.setCaratulaByPath(fileCaratula);
 		} else {
 			txtId.setText("");
 			txtTitulo.setText("");

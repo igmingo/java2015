@@ -45,7 +45,17 @@ public class Caratula extends JLabel {
 		// TODO Apéndice de constructor generado automáticamente
 	}
 
-	public void setImagenCaratula(File archivoCaratula, int w, int h) {
+	public void setCaratulaByPath(File archivo) {
+		//File archivo = new File(path);
+		if (archivo.exists()) {
+			setCaratulaByPath(archivo, this.getWidth(), this.getHeight());
+		} else {
+			setText("Caratula no encontrada.");
+			setIcon(null);
+		}
+	}
+	
+	public void setCaratulaByPath(File archivoCaratula, int w, int h) {
 		setArchivoCaratula(archivoCaratula);
 		setSize(w, h);
 		
@@ -55,16 +65,6 @@ public class Caratula extends JLabel {
 			setText(getNombreCaratula());
 		} catch (Exception e) {
 			setText("Error.");
-			setIcon(null);
-		}
-	}
-
-	public void setCaratulaByPath(String path, int w, int h) {
-		File archivo = new File(path);
-		if (archivo.exists()) {
-			setImagenCaratula(archivo, w, h);
-		} else {
-			setText("Caratula no encontrada.");
 			setIcon(null);
 		}
 	}
