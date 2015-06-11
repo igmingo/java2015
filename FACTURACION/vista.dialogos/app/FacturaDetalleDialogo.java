@@ -30,6 +30,7 @@ import javax.swing.JComboBox;
 
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.awt.BorderLayout;
 
 // TABLA facturasdetalle BASE DE DATOS
 //id int(10) UNSIGNED No auto_increment
@@ -58,30 +59,21 @@ public class FacturaDetalleDialogo extends JDialog {
 
 	public FacturaDetalleDialogo(FacturaDetalle facDet) {
 		this.fd = facDet;
-		setBounds(new Rectangle(0, 0, 450, 285));
+		
+		setResizable(false);
+		setBounds(new Rectangle(0, 0, 450, 280));
 		setTitle("Detalle de Producto en la Factura");
 		setModal(true);
-		getContentPane().setLayout(null);
-		
-		JPanel pnButtons = new JPanel();
-		pnButtons.setBounds(10, 204, 414, 31);
-		getContentPane().add(pnButtons);
-		
-		JButton btnGrabar = new JButton("Guardar");
-		pnButtons.add(btnGrabar);
-		JButton btnEliminar = new JButton("Eliminar");
-		pnButtons.add(btnEliminar);
-		JButton btnCancelar = new JButton("Cancelar");
-		pnButtons.add(btnCancelar);
+		getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel form = new JPanel();
-		form.setBounds(10, 11, 414, 182);
 		getContentPane().add(form);
-		form.setLayout(new FormLayout(new ColumnSpec[] {
+		FormLayout fl_form = new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),},
+				ColumnSpec.decode("default:grow"),
+				FormFactory.RELATED_GAP_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
@@ -96,7 +88,10 @@ public class FacturaDetalleDialogo extends JDialog {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));
+				FormFactory.DEFAULT_ROWSPEC,
+				RowSpec.decode("4dlu:grow"),});
+		fl_form.setHonorsVisibility(false);
+		form.setLayout(fl_form);
 		
 		JLabel lblId = new JLabel("ID");
 		form.add(lblId, "2, 2, right, default");
@@ -148,6 +143,25 @@ public class FacturaDetalleDialogo extends JDialog {
 		
 		numCantidad = new JSpinner();
 		form.add(numCantidad, "4, 14, fill, default");
+		
+		cbProd.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				Producto prod = (Producto) cbProd.getSelectedItem();
+				txtProdNombre.setText(prod.getNombre());
+				numProdPrecio.setValue(prod.getPrecio());
+				numProdIva.setValue(prod.getIva());
+			}
+		});
+		
+		JPanel pnButtons = new JPanel();
+		getContentPane().add(pnButtons, BorderLayout.SOUTH);
+		
+		JButton btnGrabar = new JButton("Guardar");
+		pnButtons.add(btnGrabar);
+		JButton btnEliminar = new JButton("Eliminar");
+		pnButtons.add(btnEliminar);
+		JButton btnCancelar = new JButton("Cancelar");
+		pnButtons.add(btnCancelar);
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				fd = null;
@@ -165,15 +179,6 @@ public class FacturaDetalleDialogo extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				guardar();
 				setVisible(false);
-			}
-		});
-		
-		cbProd.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent arg0) {
-				Producto prod = (Producto) cbProd.getSelectedItem();
-				txtProdNombre.setText(prod.getNombre());
-				numProdPrecio.setValue(prod.getPrecio());
-				numProdIva.setValue(prod.getIva());
 			}
 		});
 		

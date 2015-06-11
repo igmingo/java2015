@@ -39,7 +39,8 @@ public class ProductoDialogo extends JDialog {
 	
 	private Producto producto;
 
-	public ProductoDialogo(int id) {
+	public ProductoDialogo(Producto pro) {
+		this.producto = pro;
 		setBounds(new Rectangle(0, 0, 450, 370));
 		setTitle("Producto");
 		setModal(true);
@@ -135,13 +136,12 @@ public class ProductoDialogo extends JDialog {
 				setVisible(false);
 			}
 		});
-		
-		if (id>0) {
-			producto = new ProductosBDD().recuperaPorId(id);
+		if (producto!=null && producto.getId()>0) {
+			producto = new ProductosBDD().recuperaPorId(producto.getId());
 		} else {
 			producto = null;
 		}
-		setForm(producto);
+		setForm();
 		
 	}
 	
@@ -167,7 +167,7 @@ public class ProductoDialogo extends JDialog {
 			int newId = new ProductosBDD().grabar(producto);
 			if (newId>=0) {
 				producto.setId(newId);
-				setForm(producto);
+				setForm();
 				mostrarMensaje("Producto guardado correctamento.");
 			} else {
 				mostrarMensaje("Error al guardar.");
@@ -179,17 +179,17 @@ public class ProductoDialogo extends JDialog {
 
 	/**
 	 * Rellena los datos del Producto en el Formulario
-	 * @param prod es la instancia del Producto con el que vamos a rellenar el forumulario. Si es null, se rellena un formulario con id = 0;
+	 * @param producto es la instancia del Producto con el que vamos a rellenar el forumulario. Si es null, se rellena un formulario con id = 0;
 	 */
-	private void setForm(Producto prod) {
-		if (prod!=null) {
-			txtId.setText("" + prod.getId());
-			txtNombre.setText(prod.getNombre());
-			numPrecio.setValue(prod.getPrecio());
-			numIva.setValue(prod.getIva());
-			numStock.setValue(prod.getStock());
-			taDescripcion.setText(prod.getDescripcion());
-			chckbxBaja.setSelected(prod.isBaja());
+	private void setForm() {
+		if (producto!=null) {
+			txtId.setText("" + producto.getId());
+			txtNombre.setText(producto.getNombre());
+			numPrecio.setValue(producto.getPrecio());
+			numIva.setValue(producto.getIva());
+			numStock.setValue(producto.getStock());
+			taDescripcion.setText(producto.getDescripcion());
+			chckbxBaja.setSelected(producto.isBaja());
 		} else {
 			txtId.setText("0");
 			txtNombre.setText("");

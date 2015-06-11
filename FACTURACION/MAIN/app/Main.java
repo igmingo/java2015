@@ -45,7 +45,7 @@ public class Main extends JFrame {
 		JMenuItem mntmNuevoProducto = new JMenuItem("Nuevo Producto");
 		mntmNuevoProducto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ProductoDialogo dialogo = new ProductoDialogo(0);
+				ProductoDialogo dialogo = new ProductoDialogo(null);
 				dialogo.mostrar();
 			}
 		});
@@ -61,6 +61,12 @@ public class Main extends JFrame {
 		JMenu mnNewMenu = new JMenu("Clientes");
 		menuBar.add(mnNewMenu);
 		JMenuItem mntmNuevoCliente = new JMenuItem("Nuevo Cliente");
+		mntmNuevoCliente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ClienteDialogo dialogo = new ClienteDialogo(null);
+				dialogo.mostrar();
+			}
+		});
 		mnNewMenu.add(mntmNuevoCliente);
 		JMenuItem mntmListadoDeClientes = new JMenuItem("Listado de Clientes");
 		mntmListadoDeClientes.addActionListener(new ActionListener() {

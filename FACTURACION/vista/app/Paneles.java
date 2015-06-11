@@ -38,7 +38,6 @@ public class Paneles extends JPanel {
 		scrollPane.setBounds(10, 51, 734, 413);
 		pnTipo.add(scrollPane);
 		
-		
 		switch (nombrePanel) {
 		case "Productos":
 			tabla = new ProductosTabla(textFiltro.getText());
@@ -67,7 +66,7 @@ public class Paneles extends JPanel {
 				switch (nombrePanel) {
 				case "Productos":
 				{
-					ProductoDialogo dialogo = new ProductoDialogo(0);
+					ProductoDialogo dialogo = new ProductoDialogo(null);
 					Producto prod = dialogo.mostrar();
 					if (prod!=null) {
 						((ProductosTabla) tabla).actualizarTabla(textFiltro.getText());
