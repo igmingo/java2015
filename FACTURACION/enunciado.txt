@@ -1,0 +1,47 @@
+PRODUCTO DE FACTURACION
+TABLAS BASE DE DATOS
+
+PRODUCTOS
+id
+nombre
+precio
+iva
+stock
+descripcion
+
+CLIENTES
+id
+nombre
+apellidos
+nif
+dirCorreo
+dirFactura
+dirEnvio
+contactos
+recargoEquivalencia
+descuento
+fechaAlta
+
+FACTURAS
+id
+clienteId (tabla clientes)
+numero
+fecha
+descuento
+recargoEquivalencia
+impTotal
+impRecargo
+impIva (debería ser desglosada)
+dirCorreo
+dirFactura
+dirEnvio
+cobrada
+
+FACTURASDETALLE
+id
+facturaId (tabla facturas)
+prodId (tabla producto)
+prodNombre
+prodPrecio
+prodIva
+cantidad
