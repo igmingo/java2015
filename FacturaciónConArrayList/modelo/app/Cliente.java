@@ -126,7 +126,7 @@ public class Cliente  {
 
 	@Override
 	public String toString() {
-		return apellidos + ", " + nombre + " (" + nif + ")";
+		return apellidos + ", " + nombre;
 	}
 }
 

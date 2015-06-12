@@ -1,71 +1,74 @@
 package app;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Vector;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-// TABLA facturas BASE DE DATOS
-//id int(10) UNSIGNED No auto_increment
-//numero int(11) No
-//fecha date No
-//impTotal double No
-//cobrada tinyint(1) No
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class FacturasTabla extends JTable {
+
+public class UsuariosTabla extends JTable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -371381706871909469L;
+	private static final long serialVersionUID = -599114548334641747L;
 	private String filtro;
-	
-	public FacturasTabla(String fil) {
-		this.filtro = fil;
+	private Usuario usuario;
+
+	// METODOS CONSTRUCTORES
+	public UsuariosTabla(Usuario user, String filtro) {
+		this.usuario = user;
+		this.filtro = filtro;
 		setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, null, null, null, null},
+				{null, null, null},
 			},
-			new String[] {		
-				"Factura", "Fecha", "Cliente", "Importe Total", "Cobrada"
+			new String[] {
+				"Email", "Usuario", "ID"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-				Factura.class, Date.class, String.class, Double.class, Boolean.class
+				String.class, String.class, Integer.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
 			boolean[] columnEditables = new boolean[] {
-				false, false
+				false, false, false
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
 			}
 		});
+		getColumnModel().getColumn(0).setPreferredWidth(174);
+		getColumnModel().getColumn(1).setPreferredWidth(173);
+
+		getColumnModel().getColumn(0).setPreferredWidth(200);
 		setAutoCreateRowSorter(true);
 		
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				int row = getSelectedRow();
-				if (row != -1) {
-					Factura fac = (Factura) getValueAt(row, 0);
-					FacturaDialogo dialog = new FacturaDialogo(fac);
-					Factura f = dialog.mostrar();
-					if (f != null) {
-						actualizarTabla(fil);
-					}
+				if (row!=-1) {
+					int intId = (int) getValueAt(row, 2);
+						UsuarioDialogo dialog = new UsuarioDialogo (usuario, intId);
+						Usuario u = dialog.mostrar();
+						if (u!=null) {
+							actualizarTabla(filtro);
+						}
 				}
 			}
 		});
+		
 	}
-	
+
 	public void actualizarTabla(String filtro) {
 		this.setFiltro(filtro);
-		ArrayList<Vector<Object>> tabla = new FacturasBDD().recuperaTablaFacturas(filtro);
+		ArrayList<Vector<Object>> tabla = new UsuariosBDD().recuperaTablaUsuarios(filtro);
 		DefaultTableModel dtm = (DefaultTableModel) getModel();
 		dtm.setRowCount(0);
 		for (Vector<Object> fila : tabla) {
@@ -73,6 +76,7 @@ public class FacturasTabla extends JTable {
 		}
 	}
 
+	// METODOS SET Y GET
 	public String getFiltro() {
 		return filtro;
 	}

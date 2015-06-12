@@ -27,8 +27,10 @@ public class FacturasBDD {
 	//METODO PUBLICO
 	
 	public ArrayList<Factura> recuperaFacturaCompletaPorFiltro(String filtro) {
-		String sql = "SELECT * FROM facturas " + filtro
-				+ " ORDER BY facturas.numero";
+		String sql = "";
+		sql += "SELECT * FROM facturas WHERE ";
+		sql += filtro;
+		sql += " ORDER BY facturas.numero";
 		System.out.println(sql);
 		ArrayList<Factura> lista = new ArrayList<>();
 		Connection c = new Conexion().getConection();
@@ -68,8 +70,10 @@ public class FacturasBDD {
 	}
 	
 	public ArrayList<Factura> recuperaFacturaSimplePorFiltro(String filtro) {
-		String sql = "SELECT * FROM facturas " + filtro
-				+ " ORDER BY facturas.numero";
+		String sql = "";
+		sql += "SELECT * FROM facturas, clientes WHERE ";
+		sql += filtro;
+		sql += " ORDER BY facturas.numero";
 		System.out.println(sql);
 		ArrayList<Factura> lista = new ArrayList<>();
 		Connection c = new Conexion().getConection();
@@ -105,6 +109,19 @@ public class FacturasBDD {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return lista;
+	}
+	
+	private ArrayList<Factura> recuperaFacturaParaTabla(String campoFiltro) {
+		ArrayList<String> filtros = new ArrayList<>();
+		//filtros.add(facturaId!=null?"id=" + facturaId + " ":" factura.clienteId = cliente.id");
+		filtros.add("factura.clienteId = cliente.id");
+		filtros.add(campoFiltro!=null?"factura.numero LIKE '%" + campoFiltro + "%'":"");
+		filtros.add(campoFiltro!=null?"cliente.nombre LIKE '%" + campoFiltro + "%'":"");
+		filtros.add(campoFiltro!=null?"cliente.apellidos LIKE '%" + campoFiltro + "%'":"");
+		filtros.add(campoFiltro!=null?"cliente.nif LIKE '%" + campoFiltro + "%'":"");
+		String filtro = creaFiltro(filtros);
+		ArrayList<Factura> lista = recuperaFacturaSimplePorFiltro(filtro);
 		return lista;
 	}
 	
@@ -378,12 +395,13 @@ public class FacturasBDD {
 	 */
 	public ArrayList<Vector<Object>> recuperaTablaFacturas(String filtro) {
 		ArrayList<Vector<Object>> tableData = null;
-		ArrayList<Factura> lista = recuperaFacturaSimplePorFiltro(filtro);
+		ArrayList<Factura> lista = recuperaFacturaParaTabla(filtro);
 		tableData = new ArrayList<>();
 		for (Factura factura : lista) {
 			Vector<Object> filaData = new Vector<>();
 			filaData.add(factura);
 			filaData.add(factura.getFecha());
+			filaData.add(factura.getCliente().toString());
 			filaData.add(factura.getImpTotal());
 			filaData.add(factura.isCobrada());
 			tableData.add(filaData);
@@ -391,43 +409,16 @@ public class FacturasBDD {
 		return tableData;
 	}
 	
-//	public ArrayList<Vector<Object>> recuperaTablaFacturas2(String filtro) {
-//			// TABLA facturas BASE DE DATOS
-//			//id int(10) UNSIGNED No auto_increment
-//			//numero int(11) No
-//			//fecha date No
-//			//impTotal double No
-//			//cobrada tinyint(1) No
-//			ArrayList<Vector<Object>> tableData = null;
-//			filtro = "WHERE facturas.numero LIKE '%" + filtro + "%'";
-//			String sql = "SELECT facturas.id, facturas.numero, facturas.fecha, facturas.impTotal, facturas.cobrada FROM facturas " + filtro + " ORDER BY facturas.numero";
-//			System.out.println(sql);
-//			tableData = new ArrayList<>();
-//			Connection c = new Conexion().getConection();
-//			if (c!=null) {
-//				try {
-//					Statement comando = c.createStatement();
-//					ResultSet rs = comando.executeQuery(sql);
-//					while (rs.next() == true) {
-//						//Los datos de la fila son un tipo VECTOR
-//						Vector<Object> filaData = new Vector<>();
-//						filaData.add(rs.getInt("id"));
-//						filaData.add(rs.getInt("numero"));
-//						filaData.add(rs.getDate("fecha"));
-//						filaData.add(rs.getDouble("impTotal"));
-//						filaData.add(rs.getBoolean("cobrada"));
-//						tableData.add(filaData);
-//					}
-//				} catch (SQLException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//			try {
-//				c.close();
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//			}
-//			return tableData;
-//	}
+	private String creaFiltro(ArrayList<String> filtros) {
+		String stringFiltro = "";
+		for (int i = 0; i < filtros.size()-1 ; i++) {
+			String filtro = filtros.get(i);
+			stringFiltro += " " + filtro + " ";
+			stringFiltro += " AND ";
+		}
+		String filtro = filtros.get(filtros.size());
+		stringFiltro += filtro;
+		return stringFiltro;
+	}
 	
 }

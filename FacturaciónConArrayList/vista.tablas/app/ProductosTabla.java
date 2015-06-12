@@ -19,14 +19,14 @@ public class ProductosTabla extends JTable {
 		this.filtro = filtro;
 		setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, null},
+				{null, null, null},
 			},
 			new String[] {
-				"ID", "Nombre"
+				"Producto", "Precio", "Stock"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-				Integer.class, String.class
+				Producto.class, Double.class, Integer.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];

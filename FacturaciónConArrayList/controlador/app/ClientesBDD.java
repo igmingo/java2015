@@ -211,39 +211,4 @@ public class ClientesBDD {
 		return tableData;
 	}
 	
-//	//RECUPERAR TABLAS ESPECIALES
-//	public ArrayList<Vector<Object>> recuperaTablaClientes2(String filtro) {
-//			// Devuelve una tabla, o Vector de Vectores de objetos
-//			// `id`, `nombre`, `apellidos`, `nif`
-//			ArrayList<Vector<Object>> tableData = null;
-//			filtro = "WHERE clientes.nombre LIKE '%" + filtro + "%'";
-//			String sql = "SELECT clientes.id, clientes.nombre, clientes.apellidos, clientes.nif FROM clientes " + filtro + " ORDER BY clientes.apellidos";
-//			System.out.println(sql);
-//			tableData = new ArrayList<>();
-//			Connection c = new Conexion().getConection();
-//			if (c!=null) {
-//				try {
-//					Statement comando = c.createStatement();
-//					ResultSet rs = comando.executeQuery(sql);
-//					while (rs.next() == true) {
-//						//Los datos de la fila son un tipo VECTOR
-//						Vector<Object> filaData = new Vector<>();
-//						filaData.add(rs.getInt("id"));
-//						filaData.add(rs.getString("nombre"));
-//						filaData.add(rs.getString("apellidos"));
-//						filaData.add(rs.getString("nif"));
-//						tableData.add(filaData);
-//					}
-//				} catch (SQLException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//			try {
-//				c.close();
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//			}
-//			return tableData;
-//	}
-	
 }

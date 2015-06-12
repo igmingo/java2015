@@ -19,7 +19,7 @@ public class Paneles extends JPanel {
 	private JTextField textFiltro;
 	private JTable tabla;
 
-	public Paneles(String nombrePanel) {
+	public Paneles(Usuario user, String nombrePanel) {
 		setBounds(0, 0, 774, 528);
 		setLayout(null);
 		
@@ -39,6 +39,9 @@ public class Paneles extends JPanel {
 		pnTipo.add(scrollPane);
 		
 		switch (nombrePanel) {
+		case "Usuarios":
+			tabla = new UsuariosTabla(user, textFiltro.getText());
+			break;
 		case "Productos":
 			tabla = new ProductosTabla(textFiltro.getText());
 			break;
@@ -64,6 +67,15 @@ public class Paneles extends JPanel {
 		btnNuevo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				switch (nombrePanel) {
+				case "Usuarios":
+				{
+					UsuarioDialogo dialogo = new UsuarioDialogo(user, 0);
+					Usuario u = dialogo.mostrar();
+					if (u!=null) {
+						((UsuariosTabla) tabla).actualizarTabla(textFiltro.getText());
+					}
+				}
+					break;
 				case "Productos":
 				{
 					ProductoDialogo dialogo = new ProductoDialogo(null);

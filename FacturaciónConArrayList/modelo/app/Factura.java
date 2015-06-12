@@ -25,6 +25,7 @@ public class Factura {
 	
      private int id;
      private int clienteId;
+     private Cliente cliente;
      private String nombreCliente;
      private int numero;
      private Date fecha;
@@ -41,6 +42,31 @@ public class Factura {
 
     public Factura() {
     }
+    
+    public Factura(int id, Cliente cliente, String nombreCliente, int numero,
+			Date fecha, double porcDescuento, double porcRecargoEquivalencia,
+			double impTotal, double impRecargo, double impIva,
+			String dirCorreo, String dirFactura, String dirEnvio,
+			boolean cobrada, ArrayList<FacturaDetalle> detalles) {
+		this.id = id;
+		this.cliente = cliente;
+		if (cliente!=null) {
+			this.clienteId = cliente.getId();
+		}
+		this.nombreCliente = nombreCliente;
+		this.numero = numero;
+		this.fecha = fecha;
+		this.porcDescuento = porcDescuento;
+		this.porcRecargoEquivalencia = porcRecargoEquivalencia;
+		this.impTotal = impTotal;
+		this.impRecargo = impRecargo;
+		this.impIva = impIva;
+		this.dirCorreo = dirCorreo;
+		this.dirFactura = dirFactura;
+		this.dirEnvio = dirEnvio;
+		this.cobrada = cobrada;
+		this.detalles = detalles;
+	}
 	
     public Factura(int id, int clienteId, String nombreCliente, int numero,
 			Date fecha, double porcDescuento, double porcRecargoEquivalencia,
@@ -190,7 +216,13 @@ public class Factura {
 		this.nombreCliente = nombreCliente;
 	}
 
+	public Cliente getCliente() {
+		return cliente;
+	}
 
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
 
 	@Override
 	public String toString() {

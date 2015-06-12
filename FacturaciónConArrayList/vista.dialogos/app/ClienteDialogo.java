@@ -1,5 +1,4 @@
 package app;
-
 import javax.swing.JDialog;
 
 import com.jgoodies.forms.layout.FormLayout;
@@ -27,24 +26,7 @@ import com.toedter.calendar.JDateChooser;
 
 import javax.swing.JSpinner;
 
-// TABLA CLIENTES BASE DE DATOS
-//id int(10) UNSIGNED
-//nombre varchar(30)
-//apellidos varchar(30)
-//nif varchar(9)
-//dirCorreo mediumtext
-//dirFactura mediumtext
-//dirEnvio mediumtext
-//contacto mediumtext
-//porcRecargoEquivalencia double
-//porcDescuento double
-//fechaAlta date
-//baja tinyint(1)
-
 public class ClienteDialogo extends JDialog {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private Cliente cliente;
@@ -207,7 +189,9 @@ public class ClienteDialogo extends JDialog {
 		btnGrabar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				guardar();
-				setVisible(false);
+				if (cliente!=null) {
+					setVisible(false);
+				}
 			}
 		});
 		
@@ -222,13 +206,13 @@ public class ClienteDialogo extends JDialog {
 	
 	private void eliminar() {
 		Integer id = Utilidades.validarEntero(txtId.getText());
-		if (id!=null) {
-			int pregunta = JOptionPane.showConfirmDialog(null, "¿Desea eliminar el producto?\n", "Eliminar Producto", JOptionPane.OK_CANCEL_OPTION);
+		if (id!=null && id>0) {
+			int pregunta = JOptionPane.showConfirmDialog(null, "¿Desea eliminar el cliente?\n", "Eliminar Cliente", JOptionPane.OK_CANCEL_OPTION);
 			if (pregunta==JOptionPane.OK_OPTION) {
-				boolean eliminado = new ProductosBDD().eliminar(id);
+				boolean eliminado = new ClientesBDD().eliminar(id);
 				if (eliminado) {
 					cliente = null;
-					mostrarMensaje("Producto Eliminado.");
+					mostrarMensaje("Cliente Eliminado.");
 				} else {
 					mostrarMensaje("No se ha podido eliminar.");
 				}
@@ -238,9 +222,11 @@ public class ClienteDialogo extends JDialog {
 	
 	private void guardar() {
 		cliente = getForm();
-		if (cliente!=null) {
+		if (cliente != null && cliente.getNombre() != null
+				&& cliente.getApellidos() != null && cliente.getNif() != null
+				&& cliente.getFechaAlta() != null) {
 			int newId = new ClientesBDD().grabar(cliente);
-			if (newId>=0) {
+			if (newId >= 0) {
 				cliente.setId(newId);
 				setForm();
 				mostrarMensaje("Cliente guardado correctamente.");
@@ -249,16 +235,15 @@ public class ClienteDialogo extends JDialog {
 			}
 		} else {
 			mostrarMensaje("El formulario no es correcto.");
+			cliente = null;
 		}
 	}
-
 	/**
 	 * Rellena los datos del Producto en el Formulario
 	 * @param cliente es la instancia del Producto con el que vamos a rellenar el forumulario. Si es null, se rellena un formulario con id = 0;
 	 */
 	private void setForm() {
 		if (cliente!=null) {
-			
 			txtId.setText(""+ cliente.getId());
 			txtNombre.setText(cliente.getNombre().trim());
 			txtApellidos.setText(cliente.getApellidos().trim());
@@ -292,20 +277,21 @@ public class ClienteDialogo extends JDialog {
 	 */
 	private Cliente getForm() {
 		Cliente cli = null;
-		if (true) {
-			int id = Utilidades.validarEntero(txtId.getText());
-			String nombre = Utilidades.validarString(txtNombre.getText());
-			String apellidos = Utilidades.validarString(txtApellidos.getText());
-			String nif = Utilidades.validarString(txtNif.getText());
-			String dirCorreo = Utilidades.validarString(txtDirCorreo.getText());
-			String dirFactura = Utilidades.validarString(txtDirFactura.getText());
-			String dirEnvio = Utilidades.validarString(txtDirEnvio.getText());
-			String contacto = Utilidades.validarString(taContacto.getText());
-			double porcRecargoEquivalencia = Utilidades.validarDouble("" + numRecargoEquivalencia.getValue());
-			double porcDescuento = Utilidades.validarDouble("" + numDescuento.getValue());
-			Date fechaAlta = dateFechaAlta.getDate();
-			boolean baja = chckbxBaja.isSelected();
+		int id = Utilidades.validarEntero(txtId.getText());
+		String nombre = Utilidades.validarString(txtNombre.getText());
+		String apellidos = Utilidades.validarString(txtApellidos.getText());
+		String nif = Utilidades.validarString(txtNif.getText());
+		String dirCorreo = Utilidades.validarStringNoNull(txtDirCorreo.getText());
+		String dirFactura = Utilidades.validarStringNoNull(txtDirFactura.getText());
+		String dirEnvio = Utilidades.validarStringNoNull(txtDirEnvio.getText());
+		String contacto = Utilidades.validarStringNoNull(taContacto.getText());
+		double porcRecargoEquivalencia = Utilidades.validarDouble("" + numRecargoEquivalencia.getValue());
+		double porcDescuento = Utilidades.validarDouble("" + numDescuento.getValue());
+		Date fechaAlta = dateFechaAlta.getDate();
+		boolean baja = chckbxBaja.isSelected();
+		try {
 			cli = new Cliente(id, nombre, apellidos, nif, dirCorreo, dirFactura, dirEnvio, contacto, porcRecargoEquivalencia, porcDescuento, fechaAlta, baja);
+		} catch (Exception e) {
 		}
 		return cli;
 	}
@@ -315,7 +301,8 @@ public class ClienteDialogo extends JDialog {
 	}
 	
 	/**
-	 * Hace visible el diálogo Modal para editar un Cliente. Si se hace invisible el Dialogo, se cierra y elimina de la memoria.
+	 * Hace visible el diálogo Modal para editar un Cliente.
+	 * Si se hace invisible el Dialogo, se cierra y elimina de la memoria.
 	 * @return Retorna la instacia del Cliente que se ha guardado
 	 */
 	public Cliente mostrar() {

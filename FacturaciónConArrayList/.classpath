@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="C:/Users/Ignacio/Google Drive/jar/mysql-connector-java-5.1.35-bin.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Ignacio/Google Drive/jar/jcalendar-1.4.jar"/>
 	<classpathentry kind="lib" path="forms-1.3.0.jar" sourcepath="forms-1.3.0-src.zip"/>
+	<classpathentry kind="src" path="pruebas"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

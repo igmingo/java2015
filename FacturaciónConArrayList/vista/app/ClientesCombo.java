@@ -14,6 +14,10 @@ public class ClientesCombo extends JComboBox<Cliente> {
 		recargarCombo(0);
 	}
 	
+	public Cliente getSelectedCliente() {
+		return getItemAt(getSelectedIndex());
+	}
+	
 	public int getSelectedId() {
 		//Devuelve el ID del Genero selecionado en el Combo
 		return getItemAt(getSelectedIndex()).getId();

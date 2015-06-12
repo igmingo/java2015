@@ -1,15 +1,7 @@
-/*
-Cuatro tablas
-Facturas
-Conceptos
-Clientes
-Productos
- */
-
 package app;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -18,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JPanel;
+import javax.swing.JLabel;
 
 public class Main extends JFrame {
 	/**
@@ -26,16 +19,38 @@ public class Main extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel pnPrincipal;
 	
+	//LOGIN
+	private LoginPanel pnLogin;
+	private Usuario userPpal = null;
+	
 	public Main() {
+		
 		setResizable(false);
 		setBounds(0, 0, 800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
+		ImageIcon fondo = new ImageIcon("./images/fondo.jpg");
+		
+		/* PANEL DE LOGIN
+		 *
+		 **/
+		pnLogin = new LoginPanel();
+		pnLogin.setVisible(true);
+		pnLogin.setBounds(0, 0, getWidth(), getHeight());
+		getContentPane().add(pnLogin);
+		pnLogin.setLayout(null);
+		pnLogin.setVisible(false);
 		
 		pnPrincipal = new JPanel();
+		pnPrincipal.setOpaque(false);
 		pnPrincipal.setBounds(10, 11, 774, 528);
 		getContentPane().add(pnPrincipal);
 		pnPrincipal.setLayout(null);
+		
+		JLabel lblFondo = new JLabel("");
+		lblFondo.setBounds(0, 0, 800, 600);
+		lblFondo.setIcon(fondo);
+		getContentPane().add(lblFondo);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -82,6 +97,27 @@ public class Main extends JFrame {
 		mnFacturas.add(mntmNuevaFactura);
 		JMenuItem mntmListadoDeFacturas = new JMenuItem("Listado de Facturas");
 		mnFacturas.add(mntmListadoDeFacturas);
+		
+		JMenu mnConsultas = new JMenu("Consultas");
+		menuBar.add(mnConsultas);
+		
+		JMenuItem mntmPruebas = new JMenuItem("Pruebas");
+		mntmPruebas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Prueba p = new Prueba ();
+				p.setVisible(true);
+			}
+		});
+		mnConsultas.add(mntmPruebas);
+		
+		JMenu mnUsuarios = new JMenu("Usuarios");
+		menuBar.add(mnUsuarios);
+		
+		JMenuItem mntmAadirUsuario = new JMenuItem("A\u00F1adir Usuario");
+		mnUsuarios.add(mntmAadirUsuario);
+		
+		JMenuItem mntmAdminstracinDeUsuarios = new JMenuItem("Administraci\u00F3n de Usuarios");
+		mnUsuarios.add(mntmAdminstracinDeUsuarios);
 		mntmListadoDeFacturas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				mostrarPanel("Facturas");
@@ -91,7 +127,7 @@ public class Main extends JFrame {
 
 	protected void mostrarPanel(String string) {
 		pnPrincipal.removeAll();
-		pnPrincipal.add(new Paneles(string));
+		pnPrincipal.add(new Paneles(userPpal, string));
 		pnPrincipal.repaint();
 		pnPrincipal.validate();
 		
